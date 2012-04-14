@@ -692,7 +692,7 @@
 		
         [navController pushViewController:viewController animated:NO];
 		        
-        [UIView animateWithDuration:0.25f animations:
+        [UIView animateWithDuration:kMenuSlideDuration animations:
 		 ^
 		 {			 
 			 if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation])) 
