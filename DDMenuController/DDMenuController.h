@@ -45,6 +45,9 @@ typedef enum {
 	UIViewController *_rootViewController;
 	UIViewController *_topViewController;
 	
+	UIBarButtonItem *_leftBarButtonItem;
+	UIBarButtonItem *_rightBarButtonItem;
+	
     id _tap;
     id _pan;
     
@@ -71,6 +74,9 @@ typedef enum {
 @property(nonatomic,strong) UIViewController *rootViewController;
 @property(nonatomic,readonly) UIViewController *topViewController;
 
+@property (nonatomic, strong) UIBarButtonItem *leftBarButtonItem;
+@property (nonatomic, strong) UIBarButtonItem *rightBarButtonItem;
+
 @property(nonatomic,readonly) UITapGestureRecognizer *tap;
 @property(nonatomic,readonly) UIPanGestureRecognizer *pan;
 
@@ -78,6 +84,8 @@ typedef enum {
 - (void)showRootController:(BOOL)animated; // reset to "home" view controller
 - (void)showRightController:(BOOL)animated;  // show right
 - (void)showLeftController:(BOOL)animated;  // show left
+
+- (id)initWithLeftViewController:(UIViewController*)controller;
 
 @end
 

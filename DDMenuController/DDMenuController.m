@@ -49,12 +49,14 @@
 @synthesize tap=_tap;
 @synthesize pan=_pan;
 
+@synthesize leftBarButtonItem = _leftBarButtonItem;
+@synthesize rightBarButtonItem = _rightBarButtonItem;
 
-- (id)initWithRootViewController:(UIViewController*)controller 
+- (id)initWithLeftViewController:(UIViewController*)controller 
 {
     if ((self = [super init])) 
 	{
-        _rootViewController = controller;
+        _leftViewController = controller;
     }
     return self;
 }
@@ -567,14 +569,14 @@
 {
     _rightViewController = rightController;
     _menuFlags.canShowRight = (_rightViewController!=nil);
-	[self refreshRightNavButton];
+	[self refreshNavButtons];
 }
 
 - (void)setLeftViewController:(UIViewController *)leftController 
 {
     _leftViewController = leftController;
     _menuFlags.canShowLeft = (_leftViewController!=nil);
-	[self refreshLeftNavButton];
+	[self refreshNavButtons];
 }
 
 - (void)setRootViewController:(UIViewController *)rootViewController 
@@ -608,8 +610,7 @@
             tempRoot = nil;
         }
     }
-	[self refreshLeftNavButton];
-	[self refreshRightNavButton];
+	[self refreshNavButtons];
 }
 
 - (void)setRootController:(UIViewController *)controller animated:(BOOL)animated 
@@ -715,29 +716,34 @@
 
 #pragma Internal Nav Handling 
 
-- (void)refreshLeftNavButton
+- (void)refreshNavButtons
 {
 	if (!_rootViewController) return;
 	
-	if (_menuFlags.canShowLeft) {
-        UIBarButtonItem *button = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_menu_icon.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(showLeft:)];
-        self.topViewController.navigationItem.leftBarButtonItem = button;
-    } else {
+	if (_menuFlags.canShowLeft) 
+	{
+		if (!_leftBarButtonItem) 
+		{
+			_leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_menu_icon.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(showLeft:)];
+		}
+		self.topViewController.navigationItem.leftBarButtonItem = _leftBarButtonItem;
+    } else
         self.topViewController.navigationItem.leftBarButtonItem = nil;
-    }
+		
+	if (_menuFlags.canShowRight) 
+	{
+		if (!_rightBarButtonItem) 
+		{
+			_rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_menu_icon.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(showRight:)];
+		}
+		self.topViewController.navigationItem.rightBarButtonItem = _rightBarButtonItem;
+	}
+	else
+		self.topViewController.navigationItem.rightBarButtonItem = nil;
 }
 
-- (void)refreshRightNavButton
-{
-	if (!_rootViewController) return;
-	
-	if (_menuFlags.canShowRight) {
-        UIBarButtonItem *button = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_menu_icon.png"] style:UIBarButtonItemStyleBordered  target:self action:@selector(showRight:)];
-        self.topViewController.navigationItem.rightBarButtonItem = button;
-    } else {
-        self.topViewController.navigationItem.rightBarButtonItem = nil;
-    }
-}
+#pragma mark -
+#pragma mark Overridden Getters
 
 - (UIViewController *)topViewController
 {
@@ -759,7 +765,6 @@
     }
 	return _topViewController;
 }
-
 
 #pragma mark - Actions 
 
