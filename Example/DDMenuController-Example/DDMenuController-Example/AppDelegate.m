@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "DDMenuController.h"
+#import "MainNavigationController.h"
 #import "FeedController.h"
 #import "LeftController.h"
 #import "RightController.h"
@@ -21,7 +22,7 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
-
+	
     FeedController *mainController = [[FeedController alloc] init];
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:mainController];
     

@@ -4,7 +4,7 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>DDMenuController.xcscheme</key>
+		<key>DDMenuController-Example.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
@@ -12,7 +12,7 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>033A4620148691F6002014C7</key>
+		<key>CF9AB79E1538E6F80019E484</key>
 		<dict>
 			<key>primary</key>
 			<true/>

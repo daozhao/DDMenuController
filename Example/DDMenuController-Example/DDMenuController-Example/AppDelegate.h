@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+//@class MainNavigationController;
 @class DDMenuController;
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 

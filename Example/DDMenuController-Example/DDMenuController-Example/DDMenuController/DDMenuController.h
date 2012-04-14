@@ -40,6 +40,11 @@ typedef enum {
 @protocol DDMenuControllerDelegate;
 @interface DDMenuController : UIViewController <UIGestureRecognizerDelegate>{
     
+	UIViewController *_leftViewController;
+	UIViewController *_rightViewController;
+	UIViewController *_rootViewController;
+	UIViewController *_topViewController;
+	
     id _tap;
     id _pan;
     
@@ -64,6 +69,7 @@ typedef enum {
 @property(nonatomic,strong) UIViewController *leftViewController;
 @property(nonatomic,strong) UIViewController *rightViewController;
 @property(nonatomic,strong) UIViewController *rootViewController;
+@property(nonatomic,readonly) UIViewController *topViewController;
 
 @property(nonatomic,readonly) UITapGestureRecognizer *tap;
 @property(nonatomic,readonly) UIPanGestureRecognizer *pan;
