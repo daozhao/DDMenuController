@@ -15,10 +15,10 @@
 		CF9AB806153903F10019E484 /* FeedController.m in Sources */ = {isa = PBXBuildFile; fileRef = CF9AB7FF153903F10019E484 /* FeedController.m */; };
 		CF9AB807153903F10019E484 /* LeftController.m in Sources */ = {isa = PBXBuildFile; fileRef = CF9AB802153903F10019E484 /* LeftController.m */; };
 		CF9AB808153903F10019E484 /* RightController.m in Sources */ = {isa = PBXBuildFile; fileRef = CF9AB805153903F10019E484 /* RightController.m */; };
-		CF9AB80C153904030019E484 /* DDMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = CF9AB80B153904030019E484 /* DDMenuController.m */; };
 		CF9AB816153904280019E484 /* nav_menu_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CF9AB810153904280019E484 /* nav_menu_icon@2x.png */; };
 		CF9AB817153904280019E484 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CF9AB812153904280019E484 /* InfoPlist.strings */; };
 		CF9AB818153904280019E484 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CF9AB814153904280019E484 /* main.m */; };
+		CF9AB87415390AA40019E484 /* DDMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = CF9AB87315390AA40019E484 /* DDMenuController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,13 +35,13 @@
 		CF9AB802153903F10019E484 /* LeftController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftController.m; sourceTree = "<group>"; };
 		CF9AB804153903F10019E484 /* RightController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RightController.h; sourceTree = "<group>"; };
 		CF9AB805153903F10019E484 /* RightController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RightController.m; sourceTree = "<group>"; };
-		CF9AB80A153904030019E484 /* DDMenuController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDMenuController.h; sourceTree = "<group>"; };
-		CF9AB80B153904030019E484 /* DDMenuController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDMenuController.m; sourceTree = "<group>"; };
 		CF9AB80E153904280019E484 /* DDMenuController-Example-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DDMenuController-Example-Prefix.pch"; sourceTree = "<group>"; };
 		CF9AB810153904280019E484 /* nav_menu_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "nav_menu_icon@2x.png"; sourceTree = "<group>"; };
 		CF9AB813153904280019E484 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = InfoPlist.strings; sourceTree = "<group>"; };
 		CF9AB814153904280019E484 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		CF9AB81B153904910019E484 /* DDMenuController-Example-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "DDMenuController-Example-Info.plist"; sourceTree = "<group>"; };
+		CF9AB87215390AA40019E484 /* DDMenuController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDMenuController.h; sourceTree = "<group>"; };
+		CF9AB87315390AA40019E484 /* DDMenuController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDMenuController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,7 +92,7 @@
 			children = (
 				CF9AB7B21538E6F90019E484 /* AppDelegate.h */,
 				CF9AB7B31538E6F90019E484 /* AppDelegate.m */,
-				CF9AB809153904030019E484 /* DDMenuController */,
+				CF9AB87115390AA40019E484 /* DDMenuController */,
 				CF9AB7FC153903F10019E484 /* Controllers */,
 				CF9AB81A153904380019E484 /* Supporting Files */,
 			);
@@ -136,15 +136,6 @@
 			path = RightController;
 			sourceTree = "<group>";
 		};
-		CF9AB809153904030019E484 /* DDMenuController */ = {
-			isa = PBXGroup;
-			children = (
-				CF9AB80A153904030019E484 /* DDMenuController.h */,
-				CF9AB80B153904030019E484 /* DDMenuController.m */,
-			);
-			path = DDMenuController;
-			sourceTree = "<group>";
-		};
 		CF9AB80F153904280019E484 /* DemoImages */ = {
 			isa = PBXGroup;
 			children = (
@@ -171,6 +162,15 @@
 				CF9AB814153904280019E484 /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		CF9AB87115390AA40019E484 /* DDMenuController */ = {
+			isa = PBXGroup;
+			children = (
+				CF9AB87215390AA40019E484 /* DDMenuController.h */,
+				CF9AB87315390AA40019E484 /* DDMenuController.m */,
+			);
+			path = DDMenuController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -240,8 +240,8 @@
 				CF9AB806153903F10019E484 /* FeedController.m in Sources */,
 				CF9AB807153903F10019E484 /* LeftController.m in Sources */,
 				CF9AB808153903F10019E484 /* RightController.m in Sources */,
-				CF9AB80C153904030019E484 /* DDMenuController.m in Sources */,
 				CF9AB818153904280019E484 /* main.m in Sources */,
+				CF9AB87415390AA40019E484 /* DDMenuController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
