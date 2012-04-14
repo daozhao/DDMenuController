@@ -8,7 +8,6 @@
 
 #import "AppDelegate.h"
 #import "DDMenuController.h"
-#import "MainNavigationController.h"
 #import "FeedController.h"
 #import "LeftController.h"
 #import "RightController.h"
