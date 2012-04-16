@@ -85,8 +85,6 @@ typedef enum {
 - (void)showRightController:(BOOL)animated;  // show right
 - (void)showLeftController:(BOOL)animated;  // show left
 
-- (id)initWithLeftViewController:(UIViewController*)controller;
-
 @end
 
 @protocol DDMenuControllerDelegate 

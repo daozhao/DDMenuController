@@ -52,11 +52,11 @@
 @synthesize leftBarButtonItem = _leftBarButtonItem;
 @synthesize rightBarButtonItem = _rightBarButtonItem;
 
-- (id)initWithLeftViewController:(UIViewController*)controller 
+- (id)initWithRootViewController:(UIViewController*)controller 
 {
     if ((self = [super init])) 
 	{
-        _leftViewController = controller;
+        _rootViewController = controller;
     }
     return self;
 }
