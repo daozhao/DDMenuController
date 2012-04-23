@@ -37,6 +37,14 @@ typedef enum {
     DDMenuPanCompletionRoot,
 } DDMenuPanCompletion;
 
+typedef struct {
+	unsigned int respondsToWillShowViewController:1;
+	unsigned int showingLeftView:1;
+	unsigned int showingRightView:1;
+	unsigned int canShowRight:1;
+	unsigned int canShowLeft:1;
+} MenuFlags;
+
 @protocol DDMenuControllerDelegate;
 @interface DDMenuController : UIViewController <UIGestureRecognizerDelegate>{
     
@@ -54,15 +62,8 @@ typedef enum {
     CGFloat _panOriginX;
     CGPoint _panVelocity;
     DDMenuPanDirection _panDirection;
-
-    struct {
-        unsigned int respondsToWillShowViewController:1;
-        unsigned int showingLeftView:1;
-        unsigned int showingRightView:1;
-        unsigned int canShowRight:1;
-        unsigned int canShowLeft:1;
-    } _menuFlags;
-    
+	
+	MenuFlags _menuFlags;
 }
 
 - (id)initWithRootViewController:(UIViewController*)controller;
@@ -79,6 +80,8 @@ typedef enum {
 
 @property(nonatomic,readonly) UITapGestureRecognizer *tap;
 @property(nonatomic,readonly) UIPanGestureRecognizer *pan;
+
+@property(nonatomic, readonly) MenuFlags menuFlags;
 
 - (void)setRootController:(UIViewController *)controller animated:(BOOL)animated; // used to push a new controller on the stack
 - (void)showRootController:(BOOL)animated; // reset to "home" view controller

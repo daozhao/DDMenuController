@@ -52,6 +52,8 @@
 @synthesize leftBarButtonItem = _leftBarButtonItem;
 @synthesize rightBarButtonItem = _rightBarButtonItem;
 
+@synthesize menuFlags = _menuFlags;
+
 - (id)initWithRootViewController:(UIViewController*)controller 
 {
     if ((self = [super init])) 
@@ -658,7 +660,6 @@
         [self showRootController:animated];
     }
 }
-
 
 #pragma mark - Root Controller Navigation
 
