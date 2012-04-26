@@ -25,6 +25,7 @@
 //
 
 #import "DDMenuController.h"
+#import "NSString+FilePath.h"
 
 #define kMenuFullWidth 320.0f
 #define kMenuDisplayedWidth 280.0f
@@ -725,7 +726,11 @@
 	{
 		if (!_leftBarButtonItem) 
 		{
-			_leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_menu_icon.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(showLeft:)];
+			UIImage *tmpImage = [UIImage imageNamed:@"_iPhone/_buttons/menuButton.png"];
+			NSLog(@"%@", tmpImage);
+			NSData *tmpData = UIImagePNGRepresentation(tmpImage);
+			[tmpData writeToFile:[NSString getDocumentPath:@"MenuImage.png"] atomically:YES];
+			_leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"menuButton.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(showLeft:)];
 		}
 		self.topViewController.navigationItem.leftBarButtonItem = _leftBarButtonItem;
     } else
