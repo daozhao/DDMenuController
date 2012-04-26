@@ -722,15 +722,18 @@
 {
 	if (!_rootViewController) return;
 	
+	[self.topViewController.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"_iPhone/_global/darkNavBarBg.png"] forBarMetrics:UIBarMetricsDefault];
+	
 	if (_menuFlags.canShowLeft) 
 	{
 		if (!_leftBarButtonItem) 
 		{
-			UIImage *tmpImage = [UIImage imageNamed:@"_iPhone/_buttons/menuButton.png"];
-			NSLog(@"%@", tmpImage);
-			NSData *tmpData = UIImagePNGRepresentation(tmpImage);
-			[tmpData writeToFile:[NSString getDocumentPath:@"MenuImage.png"] atomically:YES];
-			_leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"menuButton.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(showLeft:)];
+			UIButton *tmpMenuButton = [UIButton buttonWithType:UIButtonTypeCustom];
+			[tmpMenuButton setFrame:CGRectMake(0, 0, 31, 31)];
+			[tmpMenuButton setBackgroundImage:[UIImage imageNamed:@"_iPhone/_buttons/menuButton.png"] forState:UIControlStateNormal];
+			[tmpMenuButton addTarget:self action:@selector(showLeft:) forControlEvents:UIControlEventTouchUpInside];
+			_leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:tmpMenuButton];
+//			[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"_iPhone/_buttons/menuButton.png"] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft:)];
 		}
 		self.topViewController.navigationItem.leftBarButtonItem = _leftBarButtonItem;
     } else
@@ -740,7 +743,7 @@
 	{
 		if (!_rightBarButtonItem) 
 		{
-			_rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_menu_icon.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(showRight:)];
+			_rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"_iPhone/_buttons/menuButton.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(showRight:)];
 		}
 		self.topViewController.navigationItem.rightBarButtonItem = _rightBarButtonItem;
 	}
