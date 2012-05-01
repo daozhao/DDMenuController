@@ -25,7 +25,6 @@
 //
 
 #import "DDMenuController.h"
-#import "NSString+FilePath.h"
 
 #define kMenuFullWidth 320.0f
 #define kMenuDisplayedWidth 280.0f
