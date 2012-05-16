@@ -28,8 +28,10 @@
 #import <QuartzCore/QuartzCore.h>
 
 #define kMenuFullWidth 320.0f
-#define kMenuDisplayedWidth 280.0f
-#define kMenuOverlayWidth (self.view.bounds.size.width - kMenuDisplayedWidth)
+#define kMenuLeftDisplayedWidth 280.0f
+#define kMenuRightDisplayedWidth 300.0f
+#define kMenuLeftOverlayWidth (self.view.bounds.size.width - kMenuLeftDisplayedWidth)
+#define kMenuRightOverlayWidth (self.view.bounds.size.width - kMenuRightDisplayedWidth)
 #define kMenuBounceOffset 10.0f
 #define kMenuBounceDuration .3f
 #define kMenuSlideDuration .3f
@@ -84,6 +86,9 @@
 - (void)viewDidLoad 
 {
     [super viewDidLoad];
+	
+	
+	
     [self setRootViewController:_rootViewController]; // reset root
     
     if (!_tap) 
@@ -143,10 +148,10 @@
         CGRect frame = self.view.bounds;
         if (_menuFlags.showingLeftView) 
 		{
-            frame.origin.x = frame.size.width - kMenuOverlayWidth;
+            frame.origin.x = frame.size.width - kMenuLeftOverlayWidth;
         } else if (_menuFlags.showingRightView) 
 		{
-            frame.origin.x = -(frame.size.width - kMenuOverlayWidth);
+            frame.origin.x = -(frame.size.width - kMenuRightOverlayWidth);
         }
         _rootViewController.view.frame = frame;
         _rootViewController.view.autoresizingMask = self.view.autoresizingMask;
@@ -361,7 +366,7 @@
     [self.leftViewController viewWillAppear:animated];
     
     frame = _rootViewController.view.frame;
-    frame.origin.x = CGRectGetMaxX(view.frame) - (kMenuFullWidth - kMenuDisplayedWidth);
+    frame.origin.x = CGRectGetMaxX(view.frame) - (kMenuFullWidth - kMenuLeftDisplayedWidth);
     
     BOOL _enabled = [UIView areAnimationsEnabled];
     if (!animated)
@@ -410,7 +415,7 @@
     [self.view insertSubview:view atIndex:0];
     
     frame = _rootViewController.view.frame;
-    frame.origin.x = -(frame.size.width - kMenuOverlayWidth);
+    frame.origin.x = -(frame.size.width - kMenuRightOverlayWidth);
     
     BOOL _enabled = [UIView areAnimationsEnabled];
     if (!animated) 
@@ -575,9 +580,9 @@
 		 ^
 		 {			 
 			 if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation])) 
-				 self.view.transform = CGAffineTransformConcat(currentTransform, CGAffineTransformMakeTranslation(0, kMenuDisplayedWidth));
+				self.view.transform = CGAffineTransformConcat(currentTransform, CGAffineTransformMakeTranslation(0, kMenuRightDisplayedWidth));
 			 else 
-				 self.view.transform = CGAffineTransformConcat(currentTransform, CGAffineTransformMakeTranslation(kMenuDisplayedWidth, 0));
+				 self.view.transform = CGAffineTransformConcat(currentTransform, CGAffineTransformMakeTranslation(kMenuRightDisplayedWidth, 0));
 		 } 
 						 completion:
 		 ^(BOOL finished) 
