@@ -28,7 +28,7 @@
 #import <QuartzCore/QuartzCore.h>
 
 #define kMenuFullWidth 320.0f
-#define kMenuLeftDisplayedWidth 280.0f
+#define kMenuLeftDisplayedWidth 200.0f
 #define kMenuRightDisplayedWidth 300.0f
 #define kMenuLeftOverlayWidth (self.view.bounds.size.width - kMenuLeftDisplayedWidth)
 #define kMenuRightOverlayWidth (self.view.bounds.size.width - kMenuRightDisplayedWidth)
