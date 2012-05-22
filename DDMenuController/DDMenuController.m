@@ -30,12 +30,15 @@
 #define kMenuFullWidth 320.0f
 #define kMenuLeftDisplayedWidth 200.0f
 #define kMenuRightDisplayedWidth 300.0f
-#define kMenuLeftOverlayWidth (self.view.bounds.size.width - kMenuLeftDisplayedWidth)
-#define kMenuRightOverlayWidth (self.view.bounds.size.width - kMenuRightDisplayedWidth)
+#define kMenuLeftOverlayWidth (320.0f - kMenuLeftDisplayedWidth) 
+#define kMenuRightOverlayWidth (320.0f - kMenuRightDisplayedWidth)
 #define kMenuBounceOffset 10.0f
 #define kMenuBounceDuration .3f
 #define kMenuSlideDuration .3f
 
+
+CGFloat const DDMenuControllerLeftOverlayWidth = kMenuLeftOverlayWidth;
+CGFloat const DDMenuControllerRightOverlayWidth = kMenuRightOverlayWidth;
 
 @interface DDMenuController (Internal)
 - (void)showShadow:(BOOL)val;

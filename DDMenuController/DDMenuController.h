@@ -45,6 +45,9 @@ typedef struct {
 	unsigned int canShowLeft:1;
 } MenuFlags;
 
+UIKIT_EXTERN CGFloat const DDMenuControllerLeftOverlayWidth;
+UIKIT_EXTERN CGFloat const DDMenuControllerRightOverlayWidth;
+
 @protocol DDMenuControllerDelegate;
 @interface DDMenuController : UIViewController <UIGestureRecognizerDelegate>{
     
@@ -87,6 +90,7 @@ typedef struct {
 - (void)showRootController:(BOOL)animated; // reset to "home" view controller
 - (void)showRightController:(BOOL)animated;  // show right
 - (void)showLeftController:(BOOL)animated;  // show left
+- (void)refreshNavButtons;
 
 @end
 
