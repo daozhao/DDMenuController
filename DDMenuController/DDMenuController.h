@@ -61,6 +61,7 @@ UIKIT_EXTERN CGFloat const DDMenuControllerDefaultRightOverlayWidth;
 	
 	CGFloat _leftOverlayWidth;
 	CGFloat _rightOverlayWidth;
+	CGFloat _menuFullWidth;
 	
     id _tap;
     id _pan;
@@ -82,6 +83,7 @@ UIKIT_EXTERN CGFloat const DDMenuControllerDefaultRightOverlayWidth;
 @property(nonatomic,readonly) UIViewController *topViewController;
 @property(nonatomic, readwrite) CGFloat leftOverlayWidth;
 @property(nonatomic, readwrite) CGFloat rightOverlayWidth;
+@property(nonatomic, readwrite) CGFloat menuFullWidth;
 
 @property (nonatomic, strong) UIBarButtonItem *leftBarButtonItem;
 @property (nonatomic, strong) UIBarButtonItem *rightBarButtonItem;

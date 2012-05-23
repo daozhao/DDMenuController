@@ -52,6 +52,10 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
 @synthesize rightViewController=_rightViewController;
 @synthesize rootViewController=_rootViewController;
 
+@synthesize leftOverlayWidth = _leftOverlayWidth;
+@synthesize rightOverlayWidth = _rightOverlayWidth;
+@synthesize menuFullWidth = _menuFullWidth;
+
 @synthesize tap=_tap;
 @synthesize pan=_pan;
 
@@ -90,8 +94,10 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
 {
     [super viewDidLoad];
 	
+	// Set Defaults
 	[self setLeftOverlayWidth:DDMenuControllerDefaultLeftOverlayWidth];
 	[self setRightOverlayWidth:DDMenuControllerDefaultRightOverlayWidth];
+	[self setMenuFullWidth:kMenuFullWidth];
 	
     [self setRootViewController:_rootViewController]; // reset root
     
@@ -152,10 +158,10 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
         CGRect frame = self.view.bounds;
         if (_menuFlags.showingLeftView) 
 		{
-            frame.origin.x = frame.size.width - kMenuLeftOverlayWidth;
+            frame.origin.x = frame.size.width - self.leftOverlayWidth;
         } else if (_menuFlags.showingRightView) 
 		{
-            frame.origin.x = -(frame.size.width - kMenuRightOverlayWidth);
+            frame.origin.x = -(frame.size.width - self.rightOverlayWidth);
         }
         _rootViewController.view.frame = frame;
         _rootViewController.view.autoresizingMask = self.view.autoresizingMask;
@@ -364,13 +370,13 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
 
     UIView *view = self.leftViewController.view;
 	CGRect frame = self.view.bounds;
-	frame.size.width = kMenuFullWidth;
+	frame.size.width = self.menuFullWidth;
     view.frame = frame;
     [self.view insertSubview:view atIndex:0];
     [self.leftViewController viewWillAppear:animated];
     
     frame = _rootViewController.view.frame;
-    frame.origin.x = CGRectGetMaxX(view.frame) - (kMenuFullWidth - kMenuLeftDisplayedWidth);
+    frame.origin.x = CGRectGetMaxX(view.frame) - (self.menuFullWidth - (self.view.bounds.size.width - self.leftOverlayWidth));
     
     BOOL _enabled = [UIView areAnimationsEnabled];
     if (!animated)
@@ -413,13 +419,13 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
 
     UIView *view = self.rightViewController.view;
     CGRect frame = self.view.bounds;
-	frame.origin.x += frame.size.width - kMenuFullWidth;
-	frame.size.width = kMenuFullWidth;
+	frame.origin.x += frame.size.width - self.menuFullWidth;
+	frame.size.width = self.menuFullWidth;
     view.frame = frame;
     [self.view insertSubview:view atIndex:0];
     
     frame = _rootViewController.view.frame;
-    frame.origin.x = -(frame.size.width - kMenuRightOverlayWidth);
+    frame.origin.x = -(frame.size.width - self.rightOverlayWidth);
     
     BOOL _enabled = [UIView areAnimationsEnabled];
     if (!animated) 
@@ -584,9 +590,9 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
 		 ^
 		 {			 
 			 if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation])) 
-				self.view.transform = CGAffineTransformConcat(currentTransform, CGAffineTransformMakeTranslation(0, kMenuRightDisplayedWidth));
+				self.view.transform = CGAffineTransformConcat(currentTransform, CGAffineTransformMakeTranslation(0, (self.view.bounds.size.width - self.rightOverlayWidth)));
 			 else 
-				 self.view.transform = CGAffineTransformConcat(currentTransform, CGAffineTransformMakeTranslation(kMenuRightDisplayedWidth, 0));
+				 self.view.transform = CGAffineTransformConcat(currentTransform, CGAffineTransformMakeTranslation((self.view.bounds.size.width - self.rightOverlayWidth), 0));
 		 } 
 						 completion:
 		 ^(BOOL finished) 
