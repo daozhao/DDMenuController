@@ -45,8 +45,8 @@ typedef struct {
 	unsigned int canShowLeft:1;
 } MenuFlags;
 
-UIKIT_EXTERN CGFloat const DDMenuControllerLeftOverlayWidth;
-UIKIT_EXTERN CGFloat const DDMenuControllerRightOverlayWidth;
+UIKIT_EXTERN CGFloat const DDMenuControllerDefaultLeftOverlayWidth;
+UIKIT_EXTERN CGFloat const DDMenuControllerDefaultRightOverlayWidth;
 
 @protocol DDMenuControllerDelegate;
 @interface DDMenuController : UIViewController <UIGestureRecognizerDelegate>{
@@ -58,6 +58,9 @@ UIKIT_EXTERN CGFloat const DDMenuControllerRightOverlayWidth;
 	
 	UIBarButtonItem *_leftBarButtonItem;
 	UIBarButtonItem *_rightBarButtonItem;
+	
+	CGFloat _leftOverlayWidth;
+	CGFloat _rightOverlayWidth;
 	
     id _tap;
     id _pan;
@@ -77,6 +80,8 @@ UIKIT_EXTERN CGFloat const DDMenuControllerRightOverlayWidth;
 @property(nonatomic,strong) UIViewController *rightViewController;
 @property(nonatomic,strong) UIViewController *rootViewController;
 @property(nonatomic,readonly) UIViewController *topViewController;
+@property(nonatomic, readwrite) CGFloat leftOverlayWidth;
+@property(nonatomic, readwrite) CGFloat rightOverlayWidth;
 
 @property (nonatomic, strong) UIBarButtonItem *leftBarButtonItem;
 @property (nonatomic, strong) UIBarButtonItem *rightBarButtonItem;

@@ -37,8 +37,8 @@
 #define kMenuSlideDuration .3f
 
 
-CGFloat const DDMenuControllerLeftOverlayWidth = kMenuLeftOverlayWidth;
-CGFloat const DDMenuControllerRightOverlayWidth = kMenuRightOverlayWidth;
+CGFloat const DDMenuControllerDefaultLeftOverlayWidth = kMenuLeftOverlayWidth;
+CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
 
 @interface DDMenuController (Internal)
 - (void)showShadow:(BOOL)val;
@@ -90,7 +90,8 @@ CGFloat const DDMenuControllerRightOverlayWidth = kMenuRightOverlayWidth;
 {
     [super viewDidLoad];
 	
-	
+	[self setLeftOverlayWidth:DDMenuControllerDefaultLeftOverlayWidth];
+	[self setRightOverlayWidth:DDMenuControllerDefaultRightOverlayWidth];
 	
     [self setRootViewController:_rootViewController]; // reset root
     
