@@ -376,7 +376,7 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
     [self.leftViewController viewWillAppear:animated];
     
     frame = _rootViewController.view.frame;
-    frame.origin.x = CGRectGetMaxX(view.frame) - (self.menuFullWidth - (self.view.bounds.size.width - self.leftOverlayWidth));
+    frame.origin.x = CGRectGetMaxX(view.frame) - self.leftOverlayWidth;
     
     BOOL _enabled = [UIView areAnimationsEnabled];
     if (!animated)
@@ -590,9 +590,9 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
 		 ^
 		 {			 
 			 if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation])) 
-				self.view.transform = CGAffineTransformConcat(currentTransform, CGAffineTransformMakeTranslation(0, (self.view.bounds.size.width - self.rightOverlayWidth)));
+				self.view.transform = CGAffineTransformConcat(currentTransform, CGAffineTransformMakeTranslation(0, self.rightOverlayWidth));
 			 else 
-				 self.view.transform = CGAffineTransformConcat(currentTransform, CGAffineTransformMakeTranslation((self.view.bounds.size.width - self.rightOverlayWidth), 0));
+				 self.view.transform = CGAffineTransformConcat(currentTransform, CGAffineTransformMakeTranslation(self.rightOverlayWidth, 0));
 		 } 
 						 completion:
 		 ^(BOOL finished) 
