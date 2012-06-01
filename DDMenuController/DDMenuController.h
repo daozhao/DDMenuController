@@ -98,6 +98,7 @@ UIKIT_EXTERN CGFloat const DDMenuControllerDefaultRightOverlayWidth;
 - (void)showRightController:(BOOL)animated;  // show right
 - (void)showLeftController:(BOOL)animated;  // show left
 - (void)refreshNavButtons;
+- (void)showShadow:(BOOL)val;
 
 @end
 

@@ -40,10 +40,6 @@
 CGFloat const DDMenuControllerDefaultLeftOverlayWidth = kMenuLeftOverlayWidth;
 CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
 
-@interface DDMenuController (Internal)
-- (void)showShadow:(BOOL)val;
-@end
-
 @implementation DDMenuController
 
 @synthesize delegate;
@@ -192,13 +188,17 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
     if (gesture.state == UIGestureRecognizerStateChanged) 
 	{
 		_panDirection = _menuFlags.showingLeftView ? DDMenuPanDirectionLeft : DDMenuPanDirectionRight;
-
+		
         CGPoint translation = [gesture translationInView:self.view];
 		
         CGRect frame = CGRectMake(_panOriginX + translation.x, _rootViewController.view.frame.origin.y, _rootViewController.view.bounds.size.width, _rootViewController.view.bounds.size.height);
         
         _rootViewController.view.frame = frame;
-
+		
+		CGFloat percentOpen = (_panOriginX + translation.x) / kMenuLeftDisplayedWidth;
+		// Damping factor on alpha transform
+		CGFloat percentAlpha = (percentOpen / 1.2);
+		self.leftViewController.view.alpha = MIN(1, percentAlpha);
     } 
 	else if (gesture.state == UIGestureRecognizerStateEnded || gesture.state == UIGestureRecognizerStateCancelled || gesture.state == UIGestureRecognizerStateRecognized || gesture.state == UIGestureRecognizerStateFailed) 
 	{
@@ -208,45 +208,6 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
 		
 		[self showRootController:YES];
 		[self.view setUserInteractionEnabled:YES];	
-        		/*
-		CGFloat duration = MAX(kMenuSlideDuration * ([gesture locationInView:self.view].x / kMenuDisplayedWidth), 0.1f);
-		
-		if (duration < 0.15f)
-			NSLog(@"Duration = 0.1f");
-		
-		[UIView animateWithDuration:duration
-							  delay:0.0f
-							options:UIViewAnimationOptionCurveEaseIn
-						 animations:
-		 ^
-		{
-			if (gesture.state == UIGestureRecognizerStateFailed)
-			{
-				[_rootViewController.view setFrame:CGRectMake(_panOriginX, _rootViewController.view.frame.origin.y, _rootViewController.view.bounds.size.width, _rootViewController.view.bounds.size.height)];
-			}
-			else
-			{
-				[_rootViewController.view setFrame:CGRectMake(0.0f, _rootViewController.view.frame.origin.y, _rootViewController.view.bounds.size.width, _rootViewController.view.bounds.size.height)];
-			}
-		} 
-						 completion:
-		 ^(BOOL finished) 
-		{
-			if (gesture.state == UIGestureRecognizerStateFailed) 
-			{
-				if (self.menuFlags.showingLeftView)
-					[self showLeftController:YES];
-				else
-					[self showRightController:YES];
-			}
-			else
-			{
-				[self showRootController:NO];
-			}
-			
-            [self.view setUserInteractionEnabled:YES];		 
-		}];
-				 */
 	}    
 }
 
@@ -325,6 +286,11 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
     [UIView animateWithDuration:.3 animations:
 	^
 	{
+		
+		if (_menuFlags.showingLeftView) {
+			// Alpha start
+			self.leftViewController.view.alpha = 0.2f;
+		}
         
         _rootViewController.view.frame = frame;
         
@@ -382,10 +348,13 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
     if (!animated)
         [UIView setAnimationsEnabled:NO];
     
+	// Add alpha fade here
+	self.leftViewController.view.alpha = 0.2;
     _rootViewController.view.userInteractionEnabled = YES;
     [UIView animateWithDuration:.3 animations:
 	^
 	{
+		self.leftViewController.view.alpha = 1.0;
         _rootViewController.view.frame = frame;
     } 
 					 completion:
