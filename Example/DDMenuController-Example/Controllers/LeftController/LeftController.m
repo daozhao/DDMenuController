@@ -9,6 +9,7 @@
 #import "LeftController.h"
 #import "FeedController.h"
 #import "DDMenuController.h"
+#import "MainController.h"
 
 @implementation LeftController
 
@@ -85,11 +86,19 @@
     
     // set the root controller
     DDMenuController *menuController = (DDMenuController*)((AppDelegate*)[[UIApplication sharedApplication] delegate]).menuController;
-    FeedController *controller = [[FeedController alloc] init];
-    controller.title = [NSString stringWithFormat:@"Cell %i", indexPath.row];
-    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:controller];
-
-    [menuController setRootController:navController animated:YES];
+    
+    if(indexPath.row==0){
+		MainController *viewController = [[MainController alloc]init];
+		UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:viewController];
+		
+		[menuController setRootController:navController animated:YES];
+	} else {
+        FeedController *controller = [[FeedController alloc] init];
+        controller.title = [NSString stringWithFormat:@"Cell %i", indexPath.row];
+        UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:controller];
+        
+        [menuController setRootController:navController animated:YES];
+    }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     

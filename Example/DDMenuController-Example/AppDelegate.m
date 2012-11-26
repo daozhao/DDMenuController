@@ -35,8 +35,8 @@
     //rootController.leftViewController = leftController;
     
     RightController *rightController = [[RightController alloc] init];
-    [rootController setRightViewController:rightController autoButtonIamgeName:@"nav_menu_icon.png"];
-    //rootController.rightViewController = rightController;
+    //[rootController setRightViewController:rightController autoButtonIamgeName:@"nav_menu_icon.png"];
+    rootController.rightViewController = rightController;
     
     self.window.rootViewController = rootController;
     
