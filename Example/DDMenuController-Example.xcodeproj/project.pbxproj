@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4479DCB51662FE86003BFB5F /* DDMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4479DCB41662FE86003BFB5F /* DDMenuController.m */; };
+		4479DCBC166302AE003BFB5F /* DDMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4479DCBB166302AE003BFB5F /* DDMenuController.m */; };
 		CF9AB7A41538E6F90019E484 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF9AB7A31538E6F90019E484 /* UIKit.framework */; };
 		CF9AB7A61538E6F90019E484 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF9AB7A51538E6F90019E484 /* Foundation.framework */; };
 		CF9AB7A81538E6F90019E484 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF9AB7A71538E6F90019E484 /* CoreGraphics.framework */; };
@@ -22,8 +22,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		4479DCB31662FE86003BFB5F /* DDMenuController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DDMenuController.h; path = ../../../DDMenuController/DDMenuController.h; sourceTree = "<group>"; };
-		4479DCB41662FE86003BFB5F /* DDMenuController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DDMenuController.m; path = ../../../DDMenuController/DDMenuController.m; sourceTree = "<group>"; };
+		4479DCBA166302AE003BFB5F /* DDMenuController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DDMenuController.h; path = ../../DDMenuController/DDMenuController.h; sourceTree = "<group>"; };
+		4479DCBB166302AE003BFB5F /* DDMenuController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DDMenuController.m; path = ../../DDMenuController/DDMenuController.m; sourceTree = "<group>"; };
 		CF9AB79F1538E6F90019E484 /* DDMenuController-Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "DDMenuController-Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF9AB7A31538E6F90019E484 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		CF9AB7A51538E6F90019E484 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -59,6 +59,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4479DCB91663029E003BFB5F /* DDMenuController */ = {
+			isa = PBXGroup;
+			children = (
+				4479DCBA166302AE003BFB5F /* DDMenuController.h */,
+				4479DCBB166302AE003BFB5F /* DDMenuController.m */,
+			);
+			name = DDMenuController;
+			sourceTree = "<group>";
+		};
 		CF9AB7941538E6F80019E484 = {
 			isa = PBXGroup;
 			children = (
@@ -90,9 +99,9 @@
 		CF9AB7A91538E6F90019E484 /* DDMenuController-Example */ = {
 			isa = PBXGroup;
 			children = (
+				4479DCB91663029E003BFB5F /* DDMenuController */,
 				CF9AB7B21538E6F90019E484 /* AppDelegate.h */,
 				CF9AB7B31538E6F90019E484 /* AppDelegate.m */,
-				CF9AB87E15390C480019E484 /* DDMenuController */,
 				CF9AB7FC153903F10019E484 /* Controllers */,
 				CF9AB81A153904380019E484 /* Supporting Files */,
 			);
@@ -164,15 +173,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		CF9AB87E15390C480019E484 /* DDMenuController */ = {
-			isa = PBXGroup;
-			children = (
-				4479DCB31662FE86003BFB5F /* DDMenuController.h */,
-				4479DCB41662FE86003BFB5F /* DDMenuController.m */,
-			);
-			path = DDMenuController;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -241,7 +241,7 @@
 				CF9AB807153903F10019E484 /* LeftController.m in Sources */,
 				CF9AB808153903F10019E484 /* RightController.m in Sources */,
 				CF9AB818153904280019E484 /* main.m in Sources */,
-				4479DCB51662FE86003BFB5F /* DDMenuController.m in Sources */,
+				4479DCBC166302AE003BFB5F /* DDMenuController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

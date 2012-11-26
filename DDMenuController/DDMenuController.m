@@ -29,7 +29,7 @@
 
 #define kMenuFullWidth 320.0f
 #define kMenuLeftDisplayedWidth 200.0f
-#define kMenuRightDisplayedWidth 300.0f
+#define kMenuRightDisplayedWidth 280.0f
 #define kMenuLeftOverlayWidth (320.0f - kMenuLeftDisplayedWidth) 
 #define kMenuRightOverlayWidth (320.0f - kMenuRightDisplayedWidth)
 #define kMenuBounceOffset 10.0f
