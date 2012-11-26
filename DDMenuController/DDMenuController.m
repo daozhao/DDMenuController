@@ -560,8 +560,8 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
 		 {			 
 			 if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation])) 
 				self.view.transform = CGAffineTransformConcat(currentTransform, CGAffineTransformMakeTranslation(0, self.rightOverlayWidth));
-			 else 
-				 self.view.transform = CGAffineTransformConcat(currentTransform, CGAffineTransformMakeTranslation(self.rightOverlayWidth, 0));
+			 else
+                 self.view.transform = CGAffineTransformConcat(currentTransform, CGAffineTransformMakeTranslation(kMenuRightDisplayedWidth, 0));
 		 } 
 						 completion:
 		 ^(BOOL finished) 
