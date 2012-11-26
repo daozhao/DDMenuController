@@ -590,12 +590,7 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
 	{
 		if (!_leftBarButtonItem) 
 		{
-			UIButton *tmpMenuButton = [UIButton buttonWithType:UIButtonTypeCustom];
-			[tmpMenuButton setFrame:CGRectMake(0, 0, 31, 31)];
-			[tmpMenuButton setBackgroundImage:[UIImage imageNamed:@"nav_menu_icon.png"] forState:UIControlStateNormal];
-			[tmpMenuButton addTarget:self action:@selector(showLeft:) forControlEvents:UIControlEventTouchUpInside];
-			_leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:tmpMenuButton];
-//			[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"_iPhone/_buttons/menuButton.png"] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft:)];
+			_leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_menu_icon.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(showLeft:)];
 		}
 		self.topViewController.navigationItem.leftBarButtonItem = _leftBarButtonItem;
     } else
