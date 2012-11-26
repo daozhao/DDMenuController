@@ -29,6 +29,7 @@
 typedef enum {
     DDMenuPanDirectionLeft = 0,
     DDMenuPanDirectionRight,
+    DDMenuPanDirectionLeftRight,
 } DDMenuPanDirection;
 
 typedef enum {
@@ -88,12 +89,27 @@ UIKIT_EXTERN CGFloat const DDMenuControllerDefaultRightOverlayWidth;
 @property (nonatomic, strong) UIBarButtonItem *leftBarButtonItem;
 @property (nonatomic, strong) UIBarButtonItem *rightBarButtonItem;
 
+@property(nonatomic,strong) NSString  *autoLeftButtonImageName;
+@property(nonatomic,strong) NSArray *leftButtonViewForTapArray;
+@property(nonatomic,strong) NSArray *leftButtonViewForPanArray;
+@property(nonatomic,strong) NSArray *leftButtonViewForTransitionArray;
+
+@property(nonatomic,strong) NSString  *autoRightButtonImageName;
+@property(nonatomic,strong) NSArray *rightButtonViewForTapArray;
+@property(nonatomic,strong) NSArray *rightButtonViewForPanArray;
+@property(nonatomic,strong) NSArray *rightButtonViewForTransitionArray;
+
+@property(nonatomic) bool mustinitTouchAction;
+
 @property(nonatomic,readonly) UITapGestureRecognizer *tap;
 @property(nonatomic,readonly) UIPanGestureRecognizer *pan;
 
 @property(nonatomic, readonly) MenuFlags menuFlags;
 
 - (void)setRootController:(UIViewController *)controller animated:(BOOL)animated; // used to push a new controller on the stack
+- (void)setLeftViewController:(UIViewController *)leftController autoButtonIamgeName:(NSString *) name;
+- (void)setRightViewController:(UIViewController *)rightController autoButtonIamgeName:(NSString *) name;
+
 - (void)showRootController:(BOOL)animated; // reset to "home" view controller
 - (void)showRightController:(BOOL)animated;  // show right
 - (void)showLeftController:(BOOL)animated;  // show left
@@ -104,4 +120,13 @@ UIKIT_EXTERN CGFloat const DDMenuControllerDefaultRightOverlayWidth;
 
 @protocol DDMenuControllerDelegate 
 - (void)menuController:(DDMenuController*)controller willShowViewController:(UIViewController*)controller;
+
+- (NSArray *)getLeftButtonViewForTapArray;
+- (NSArray *)getLeftButtonViewForPanArray;
+- (NSArray *)getLeftButtonViewForTransitionArray;
+
+- (NSArray *)getRightButtonViewForTapArray;
+- (NSArray *)getRightButtonViewForPanArray;
+- (NSArray *)getRightButtonViewForTransitionArray;
+
 @end

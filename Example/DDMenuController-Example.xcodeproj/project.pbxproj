@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		4479DCBC166302AE003BFB5F /* DDMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4479DCBB166302AE003BFB5F /* DDMenuController.m */; };
+		4479DCD516635076003BFB5F /* MainController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4479DCD316635076003BFB5F /* MainController.m */; };
+		4479DCD616635076003BFB5F /* MainController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4479DCD416635076003BFB5F /* MainController.xib */; };
+		4479DCD91663512D003BFB5F /* zxy.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 4479DCD81663512D003BFB5F /* zxy.jpeg */; };
 		CF9AB7A41538E6F90019E484 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF9AB7A31538E6F90019E484 /* UIKit.framework */; };
 		CF9AB7A61538E6F90019E484 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF9AB7A51538E6F90019E484 /* Foundation.framework */; };
 		CF9AB7A81538E6F90019E484 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF9AB7A71538E6F90019E484 /* CoreGraphics.framework */; };
@@ -24,6 +27,10 @@
 /* Begin PBXFileReference section */
 		4479DCBA166302AE003BFB5F /* DDMenuController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DDMenuController.h; path = ../../DDMenuController/DDMenuController.h; sourceTree = "<group>"; };
 		4479DCBB166302AE003BFB5F /* DDMenuController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DDMenuController.m; path = ../../DDMenuController/DDMenuController.m; sourceTree = "<group>"; };
+		4479DCD216635076003BFB5F /* MainController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MainController.h; path = MainController/MainController.h; sourceTree = "<group>"; };
+		4479DCD316635076003BFB5F /* MainController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MainController.m; path = MainController/MainController.m; sourceTree = "<group>"; };
+		4479DCD416635076003BFB5F /* MainController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MainController.xib; path = MainController/MainController.xib; sourceTree = "<group>"; };
+		4479DCD81663512D003BFB5F /* zxy.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = zxy.jpeg; sourceTree = "<group>"; };
 		CF9AB79F1538E6F90019E484 /* DDMenuController-Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "DDMenuController-Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF9AB7A31538E6F90019E484 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		CF9AB7A51538E6F90019E484 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -66,6 +73,16 @@
 				4479DCBB166302AE003BFB5F /* DDMenuController.m */,
 			);
 			name = DDMenuController;
+			sourceTree = "<group>";
+		};
+		4479DCD716635090003BFB5F /* MainController */ = {
+			isa = PBXGroup;
+			children = (
+				4479DCD216635076003BFB5F /* MainController.h */,
+				4479DCD316635076003BFB5F /* MainController.m */,
+				4479DCD416635076003BFB5F /* MainController.xib */,
+			);
+			name = MainController;
 			sourceTree = "<group>";
 		};
 		CF9AB7941538E6F80019E484 = {
@@ -111,6 +128,7 @@
 		CF9AB7FC153903F10019E484 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				4479DCD716635090003BFB5F /* MainController */,
 				CF9AB7FD153903F10019E484 /* FeedController */,
 				CF9AB800153903F10019E484 /* LeftController */,
 				CF9AB803153903F10019E484 /* RightController */,
@@ -148,6 +166,7 @@
 		CF9AB80F153904280019E484 /* DemoImages */ = {
 			isa = PBXGroup;
 			children = (
+				4479DCD81663512D003BFB5F /* zxy.jpeg */,
 				CF9AB810153904280019E484 /* nav_menu_icon@2x.png */,
 			);
 			path = DemoImages;
@@ -226,6 +245,8 @@
 			files = (
 				CF9AB816153904280019E484 /* nav_menu_icon@2x.png in Resources */,
 				CF9AB817153904280019E484 /* InfoPlist.strings in Resources */,
+				4479DCD616635076003BFB5F /* MainController.xib in Resources */,
+				4479DCD91663512D003BFB5F /* zxy.jpeg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -242,6 +263,7 @@
 				CF9AB808153903F10019E484 /* RightController.m in Sources */,
 				CF9AB818153904280019E484 /* main.m in Sources */,
 				4479DCBC166302AE003BFB5F /* DDMenuController.m in Sources */,
+				4479DCD516635076003BFB5F /* MainController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -11,6 +11,7 @@
 #import "FeedController.h"
 #import "LeftController.h"
 #import "RightController.h"
+#import "MainController.h"
 
 @implementation AppDelegate
 
@@ -22,17 +23,20 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
 	
-    FeedController *mainController = [[FeedController alloc] init];
+    //FeedController *mainController = [[FeedController alloc] init];
+    MainController *mainController = [[MainController alloc] initWithNibName:@"MainController" bundle:nil] ;
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:mainController];
     
     DDMenuController *rootController = [[DDMenuController alloc] initWithRootViewController:navController];
     _menuController = rootController;
     
     LeftController *leftController = [[LeftController alloc] init];
-    rootController.leftViewController = leftController;
+    [rootController setLeftViewController:leftController autoButtonIamgeName:@"nav_menu_icon.png"];
+    //rootController.leftViewController = leftController;
     
     RightController *rightController = [[RightController alloc] init];
-    rootController.rightViewController = rightController;
+    [rootController setRightViewController:rightController autoButtonIamgeName:@"nav_menu_icon.png"];
+    //rootController.rightViewController = rightController;
     
     self.window.rootViewController = rootController;
     
