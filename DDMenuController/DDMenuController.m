@@ -36,6 +36,8 @@
 #define kMenuBounceOffset 10.0f
 #define kMenuBounceDuration .3f
 #define kMenuSlideDuration .3f
+#define KLeftTransformMakeRotation  M_PI
+#define KRightTransformMakeRotation M_PI
 
 
 CGFloat const DDMenuControllerDefaultLeftOverlayWidth = kMenuLeftOverlayWidth;
@@ -327,11 +329,11 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
         
         if ( frame.origin.x > 0.0f ){
             for (UIView *view in self.leftButtonViewForTransitionArray) {
-                view.transform = CGAffineTransformMakeRotation(-M_PI * (frame.origin.x /( kScreenWidth - self.leftOverlayWidth)));
+                view.transform = CGAffineTransformMakeRotation(KLeftTransformMakeRotation * (frame.origin.x /( kScreenWidth - self.leftOverlayWidth)));
             }
         } else if ( frame.origin.x < 0.0f) {
             for (UIView *view in self.rightButtonViewForTransitionArray) {
-                view.transform = CGAffineTransformMakeRotation(-M_PI * (frame.origin.x /( kScreenWidth - self.rightOverlayWidth)));
+                view.transform = CGAffineTransformMakeRotation(KRightTransformMakeRotation * (frame.origin.x /( kScreenWidth - self.rightOverlayWidth)));
             }
         }
         
@@ -645,7 +647,7 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
 		//self.leftViewController.view.alpha = 1.0;
         _rootViewController.view.frame = frame;
         for (UIView *view in self.leftButtonViewForTransitionArray) {
-            view.transform = CGAffineTransformMakeRotation(M_PI);
+            view.transform = CGAffineTransformMakeRotation(KLeftTransformMakeRotation);
         }
     }
 					 completion:
@@ -697,7 +699,7 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
 	{
         _rootViewController.view.frame = frame;
         for (UIView *view in self.rightButtonViewForTransitionArray) {
-            view.transform = CGAffineTransformMakeRotation(M_PI);
+            view.transform = CGAffineTransformMakeRotation(KRightTransformMakeRotation);
         }
     }
 					 completion:
