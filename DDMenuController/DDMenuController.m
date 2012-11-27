@@ -68,8 +68,6 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
 @synthesize tap=_tap;
 @synthesize pan=_pan;
 
-@synthesize leftBarButtonItem = _leftBarButtonItem;
-@synthesize rightBarButtonItem = _rightBarButtonItem;
 
 @synthesize menuFlags = _menuFlags;
 
@@ -126,10 +124,34 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
     
 }
 
+- (void)viewDidUnload
+{
+    [super viewDidUnload];
+    [_tap release];
+    _tap = nil;
+    
+    [_pan release];
+    _pan = nil;
+    
+    self.autoLeftButtonImageName = nil;
+    self.leftButtonViewForPanArray = nil;
+    self.leftButtonViewForTapArray = nil;
+    self.leftButtonViewForTransitionArray = nil;
+    
+    self.autoRightButtonImageName = nil;
+    self.rightButtonViewForPanArray = nil;
+    self.rightButtonViewForTapArray = nil;
+    self.rightButtonViewForTransitionArray = nil;
+    
+    [_leftViewController release];
+    [_rightViewController release];
+    [_rootViewController release];
+}
+
 -(void) initTouchAction {
     
     UIViewController<DDMenuControllerDelegate> *topViewController;
-    topViewController = self.getTopViewController;
+    topViewController = (UIViewController<DDMenuControllerDelegate>*) self.topViewController;
     if ( nil == topViewController ){
         return;
     }
@@ -181,44 +203,12 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
     }
 }
 
--(UIViewController<DDMenuControllerDelegate> *) getTopViewController {
-    if ( !_rootViewController)
-        return nil;
-    
-    UIViewController *topController = nil;
-    if ([_rootViewController isKindOfClass:[UINavigationController class]]) {
-        
-        UINavigationController *navController = (UINavigationController*)_rootViewController;
-        if ([[navController viewControllers] count] > 0) {
-            topController = [[navController viewControllers] objectAtIndex:0];
-        }
-        
-    } else if ([_rootViewController isKindOfClass:[UITabBarController class]]) {
-        
-        UITabBarController *tabController = (UITabBarController*)_rootViewController;
-        topController = [tabController selectedViewController];
-        
-    } else {
-        
-        topController = _rootViewController;
-        
-    }
-    return (UIViewController <DDMenuControllerDelegate> *) topController;
-}
-
 - (void)leftButtonViewTap:(UITapGestureRecognizer*)gesture {
     [self showLeftController:YES];
 }
 
 - (void)rightButtonViewTap:(UITapGestureRecognizer*)gesture {
     [self showRightController:YES];
-}
-
-- (void)viewDidUnload 
-{
-    [super viewDidUnload];
-    _tap = nil;
-    _pan = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation 
@@ -440,30 +430,21 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
         [timingFunctions addObject:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn]];
         [keyTimes addObject:[NSNumber numberWithFloat:0.0f]];
         if (bounce) {
-            
             duration += kMenuBounceDuration;
             [keyTimes addObject:[NSNumber numberWithFloat:1.0f - ( kMenuBounceDuration / duration)]];
             if (completion == DDMenuPanCompletionLeft) {
-                
                 [values addObject:[NSValue valueWithCGPoint:CGPointMake(((width/2) + span) + kMenuBounceOffset, pos.y)]];
-                
             } else if (completion == DDMenuPanCompletionRight) {
-                
                 [values addObject:[NSValue valueWithCGPoint:CGPointMake(-((width/2) - (self.rightOverlayWidth-kMenuBounceOffset)), pos.y)]];
-                
             } else {
-                
                 // depending on which way we're panning add a bounce offset
                 if (_panDirection == DDMenuPanDirectionLeft) {
                     [values addObject:[NSValue valueWithCGPoint:CGPointMake((width/2) - kMenuBounceOffset, pos.y)]];
                 } else {
                     [values addObject:[NSValue valueWithCGPoint:CGPointMake((width/2) + kMenuBounceOffset, pos.y)]];
                 }
-                
             }
-            
             [timingFunctions addObject:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut]];
-            
         }
         if (completion == DDMenuPanCompletionLeft) {
             [values addObject:[NSValue valueWithCGPoint:CGPointMake((width/2) + span, pos.y)]];
@@ -913,7 +894,7 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
 
 - (void)refreshNavButtons
 {
-    UIViewController *topController = self.getTopViewController;
+    UIViewController *topController = self.topViewController;
     
     if ( !topController ) {
         return;
@@ -935,32 +916,6 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
     } else {
         topController.navigationItem.rightBarButtonItem = nil;
     }
-    /*
-	if (!_rootViewController) return;
-	
-	//[self.topViewController.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"_iPhone/_global/darkNavBarBg.png"] forBarMetrics:UIBarMetricsDefault];
-	
-	if (_menuFlags.canShowLeft) 
-	{
-		if (!_leftBarButtonItem) 
-		{
-			_leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_menu_icon.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(showLeft:)];
-		}
-		self.topViewController.navigationItem.leftBarButtonItem = _leftBarButtonItem;
-    } else
-        self.topViewController.navigationItem.leftBarButtonItem = nil;
-		
-	if (_menuFlags.canShowRight) 
-	{
-		if (!_rightBarButtonItem) 
-		{
-			_rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_menu_icon.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(showRight:)];
-		}
-		self.topViewController.navigationItem.rightBarButtonItem = _rightBarButtonItem;
-	}
-	else
-		self.topViewController.navigationItem.rightBarButtonItem = nil;
-     */
 }
 
 #pragma mark -

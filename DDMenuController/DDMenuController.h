@@ -86,8 +86,6 @@ UIKIT_EXTERN CGFloat const DDMenuControllerDefaultRightOverlayWidth;
 @property(nonatomic, readwrite) CGFloat rightOverlayWidth;
 @property(nonatomic, readwrite) CGFloat menuFullWidth;
 
-@property (nonatomic, strong) UIBarButtonItem *leftBarButtonItem;
-@property (nonatomic, strong) UIBarButtonItem *rightBarButtonItem;
 
 @property(nonatomic,strong) NSString  *autoLeftButtonImageName;
 @property(nonatomic,strong) NSArray *leftButtonViewForTapArray;
