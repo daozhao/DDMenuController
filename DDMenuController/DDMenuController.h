@@ -85,6 +85,7 @@ UIKIT_EXTERN CGFloat const DDMenuControllerDefaultRightOverlayWidth;
 @property(nonatomic, readwrite) CGFloat leftOverlayWidth;
 @property(nonatomic, readwrite) CGFloat rightOverlayWidth;
 @property(nonatomic, readwrite) CGFloat menuFullWidth;
+@property(nonatomic,readwrite) CGFloat transformRotationStatus;
 
 
 @property(nonatomic,strong) NSString  *autoLeftButtonImageName;

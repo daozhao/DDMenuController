@@ -36,7 +36,7 @@
 #define kMenuBounceOffset 10.0f
 #define kMenuBounceDuration .3f
 #define kMenuSlideDuration .3f
-#define KLeftTransformMakeRotation  M_PI
+#define KLeftTransformMakeRotation  -M_PI
 #define KRightTransformMakeRotation M_PI
 
 
@@ -66,6 +66,7 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
 @synthesize leftOverlayWidth = _leftOverlayWidth;
 @synthesize rightOverlayWidth = _rightOverlayWidth;
 @synthesize menuFullWidth = _menuFullWidth;
+@synthesize transformRotationStatus = _transformRotationStatus;
 
 @synthesize tap=_tap;
 @synthesize pan=_pan;
@@ -331,10 +332,12 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
             for (UIView *view in self.leftButtonViewForTransitionArray) {
                 view.transform = CGAffineTransformMakeRotation(KLeftTransformMakeRotation * (frame.origin.x /( kScreenWidth - self.leftOverlayWidth)));
             }
+            self.transformRotationStatus = KLeftTransformMakeRotation * (frame.origin.x /( kScreenWidth - self.leftOverlayWidth));
         } else if ( frame.origin.x < 0.0f) {
             for (UIView *view in self.rightButtonViewForTransitionArray) {
                 view.transform = CGAffineTransformMakeRotation(KRightTransformMakeRotation * (frame.origin.x /( kScreenWidth - self.rightOverlayWidth)));
             }
+            self.transformRotationStatus = KRightTransformMakeRotation * (frame.origin.x /( kScreenWidth - self.rightOverlayWidth));
         }
         
         if (frame.origin.x > 0.0f && !_menuFlags.showingLeftView) {
@@ -418,17 +421,30 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
                 [self showRootController:NO];
             }
             [_rootViewController.view.layer removeAllAnimations];
+            
+            for (UIView *view in self.leftButtonViewForTransitionArray) {
+                [view.layer removeAllAnimations];
+            }
+            for (UIView *view in self.rightButtonViewForTransitionArray) {
+                [view.layer removeAllAnimations];
+            }
             [self.view setUserInteractionEnabled:YES];
         }];
         
         CGPoint pos = _rootViewController.view.layer.position;
+        //CGAffineTransform transform = self.transformStatus;
+        
         CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"position"];
+        CAKeyframeAnimation *animationTransform = [CAKeyframeAnimation animationWithKeyPath:@"transform.rotation.z"];
         
         NSMutableArray *keyTimes = [[NSMutableArray alloc] initWithCapacity:bounce ? 3 : 2];
         NSMutableArray *values = [[NSMutableArray alloc] initWithCapacity:bounce ? 3 : 2];
+        NSMutableArray *valuesTransform = [[NSMutableArray alloc] initWithCapacity:bounce ? 3 : 2];
         NSMutableArray *timingFunctions = [[NSMutableArray alloc] initWithCapacity:bounce ? 3 : 2];
         
         [values addObject:[NSValue valueWithCGPoint:pos]];
+        [valuesTransform addObject:[NSNumber numberWithFloat:self.transformRotationStatus]];
+        
         [timingFunctions addObject:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn]];
         [keyTimes addObject:[NSNumber numberWithFloat:0.0f]];
         if (bounce) {
@@ -436,8 +452,12 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
             [keyTimes addObject:[NSNumber numberWithFloat:1.0f - ( kMenuBounceDuration / duration)]];
             if (completion == DDMenuPanCompletionLeft) {
                 [values addObject:[NSValue valueWithCGPoint:CGPointMake(((width/2) + span) + kMenuBounceOffset, pos.y)]];
+                [valuesTransform addObject:[NSNumber numberWithFloat:(KLeftTransformMakeRotation-self.transformRotationStatus)/2]];
+         //[valuesTransform addObject:[NSValue valueWithCGAffineTransform:CGAffineTransformMakeRotation(KLeftTransformMakeRotation/2)]];
             } else if (completion == DDMenuPanCompletionRight) {
                 [values addObject:[NSValue valueWithCGPoint:CGPointMake(-((width/2) - (self.rightOverlayWidth-kMenuBounceOffset)), pos.y)]];
+                [valuesTransform addObject:[NSNumber numberWithFloat:(KRightTransformMakeRotation-self.transformRotationStatus)/2]];
+                //[valuesTransform addObject:[NSValue valueWithCGAffineTransform:CGAffineTransformMakeRotation(KRightTransformMakeRotation/2)]];
             } else {
                 // depending on which way we're panning add a bounce offset
                 if (_panDirection == DDMenuPanDirectionLeft) {
@@ -450,9 +470,15 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
         }
         if (completion == DDMenuPanCompletionLeft) {
             [values addObject:[NSValue valueWithCGPoint:CGPointMake((width/2) + span, pos.y)]];
+            [valuesTransform addObject:[NSNumber numberWithFloat:KLeftTransformMakeRotation]];
+            //[valuesTransform addObject:[NSValue valueWithCGAffineTransform:CGAffineTransformMakeRotation(KLeftTransformMakeRotation)]];
         } else if (completion == DDMenuPanCompletionRight) {
             [values addObject:[NSValue valueWithCGPoint:CGPointMake(-((width/2) - self.rightOverlayWidth), pos.y)]];
+            [valuesTransform addObject:[NSNumber numberWithFloat: - KRightTransformMakeRotation]];
+            //[valuesTransform addObject:[NSValue valueWithCGAffineTransform:CGAffineTransformMakeRotation(KRightTransformMakeRotation)]];
         } else {
+            [valuesTransform addObject:[NSNumber numberWithFloat:0]];
+            //[valuesTransform addObject:[NSValue valueWithCGAffineTransform:CGAffineTransformMakeRotation(0)]];
             [values addObject:[NSValue valueWithCGPoint:CGPointMake(width/2, pos.y)]];
         }
         
@@ -467,6 +493,26 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
         animation.removedOnCompletion = NO;
         animation.fillMode = kCAFillModeForwards;
         [_rootViewController.view.layer addAnimation:animation forKey:nil];
+        
+        animationTransform.timingFunctions = timingFunctions;
+        animationTransform.keyTimes = keyTimes;
+        animationTransform.values = valuesTransform;
+        animationTransform.duration = duration;
+        animationTransform.removedOnCompletion = NO;
+        animationTransform.fillMode = kCAFillModeForwards;
+        
+        if (completion == DDMenuPanCompletionLeft) {
+            for (UIView *view in self.leftButtonViewForTransitionArray) {
+                [view.layer addAnimation:animationTransform forKey:nil];
+            }
+        } else if (completion == DDMenuPanCompletionRight) {
+            for (UIView *view in self.rightButtonViewForTransitionArray) {
+                [view.layer addAnimation:animationTransform forKey:nil];
+            }
+        } else {
+            
+        }
+        
         [CATransaction commit];
         [timingFunctions release];
         [keyTimes release];
