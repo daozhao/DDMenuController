@@ -802,37 +802,38 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
 	[self refreshNavButtons];
 }
 
-- (void)setRootViewController:(UIViewController *)rootViewController 
+- (void)setRootViewController:(UIViewController *)rootController
 {
-    UIViewController *tempRoot = _rootViewController;
-    _rootViewController = rootViewController;
-    
-    if (_rootViewController) 
-	{
-        if (tempRoot) 
-		{
-            [tempRoot.view removeFromSuperview];
-            tempRoot = nil;
+    if ( _rootViewController != rootController )
+    {
+        if (_rootViewController) {
+            [_rootViewController.view removeFromSuperview];
+            [_rootViewController release];
         }
-        
+        _rootViewController = [rootController retain];
+    }
+    if (_rootViewController && _rootViewController.view.superview != self.view ) {
         UIView *view = _rootViewController.view;
         view.frame = self.view.bounds;
         [self.view addSubview:view];
-
+        
+        [_pan release];
         UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pan:)];
         pan.delegate = (id<UIGestureRecognizerDelegate>)self;
         [view addGestureRecognizer:pan];
-        _pan = pan;
-        //[_pan setEnabled:NO];
-    } 
-	else
-	{
-        if (tempRoot) 
-		{
-            [tempRoot.view removeFromSuperview];
-            tempRoot = nil;
-        }
+        _pan = [pan retain];
+        [pan release];
+        
+        self.leftButtonViewForTapArray = nil;
+        self.leftButtonViewForPanArray = nil;
+        self.leftButtonViewForTransitionArray = nil;
+        self.rightButtonViewForTapArray = nil;
+        self.rightButtonViewForPanArray = nil;
+        self.rightButtonViewForTransitionArray = nil;
+        
+        mustinitTouchAction = YES;
     }
+    
 	[self refreshNavButtons];
 }
 
