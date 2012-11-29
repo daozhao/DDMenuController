@@ -592,7 +592,7 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
         
         if (_menuFlags.showingLeftView ) {
             [self showControllerAnimation:frame rotationsView:self.leftButtonViewForTransitionArray rotationsValue:0.0f];
-        } else if (_menuFlags.showingLeftView ) {
+        } else if (_menuFlags.showingRightView ) {
             [self showControllerAnimation:frame rotationsView:self.rightButtonViewForTransitionArray rotationsValue:0.0f];
         }
     } else {
@@ -603,14 +603,13 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
         for (UIView *view in self.rightButtonViewForTransitionArray) {
             view.transform = CGAffineTransformMakeRotation(0.0f);
         }
-        //[_tap setEnabled:NO];
+        [_tap setEnabled:NO];
+        if ( self.mustinitTouchAction ) {
+            self.mustinitTouchAction = NO;
+            [self performSelectorOnMainThread:@selector(initTouchAction) withObject:nil waitUntilDone:NO];
+        }
     }
-   /*
-    if ( self.mustinitTouchAction ) {
-        self.mustinitTouchAction = NO;
-        [self performSelectorOnMainThread:@selector(initTouchAction) withObject:nil waitUntilDone:NO];
-    }
-    */
+    
 /*
     BOOL _enabled = [UIView areAnimationsEnabled];
     if (!animated) 
@@ -726,12 +725,11 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
 	frame.size.width = self.menuFullWidth;
     view.frame = frame;
     [self.view insertSubview:view atIndex:0];
-    //[self.rightViewController viewWillAppear:animated];
+    [self.rightViewController viewWillAppear:animated];
     
     frame = _rootViewController.view.frame;
     frame.origin.x = -(frame.size.width - self.rightOverlayWidth);
    
-    /*
     _rootViewController.view.userInteractionEnabled = NO;
     if (animated){
         [self showControllerAnimation:frame rotationsView:self.rightButtonViewForTransitionArray rotationsValue:KRightTransformMakeRotation];
@@ -742,7 +740,8 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
         }
         [_tap setEnabled:YES];
     }
-    */
+    
+    /*
     BOOL _enabled = [UIView areAnimationsEnabled];
     if (!animated) 
         [UIView setAnimationsEnabled:NO];
@@ -767,6 +766,7 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
 	{
         [UIView setAnimationsEnabled:_enabled];
     }
+    */
 }
 
 -(void) showControllerAnimation:(CGRect)toFrame rotationsView:(NSArray *) viewTransitionArray rotationsValue:(CGFloat) rotationsValue
@@ -798,6 +798,11 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
             
             [_tap setEnabled:NO];
             [self showShadow:NO];
+            
+            if ( self.mustinitTouchAction ) {
+                self.mustinitTouchAction = NO;
+                [self performSelectorOnMainThread:@selector(initTouchAction) withObject:nil waitUntilDone:NO];
+            }
         }
     }];
     
@@ -814,8 +819,10 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
     
     [values addObject:[NSValue valueWithCGPoint:pos]];
     [values addObject:[NSValue valueWithCGPoint:CGPointMake(toFrame.origin.x + toFrame.size.width/2, toFrame.origin.y + toFrame.size.height/2)]];
-    [valuesTransform addObject:[NSNumber numberWithFloat:0]];
+    [valuesTransform addObject:[NSNumber numberWithFloat:self.transformRotationStatus]];
     [valuesTransform addObject:[NSNumber numberWithFloat:rotationsValue]];
+    
+    self.transformRotationStatus = rotationsValue;
     
     [timingFunctions addObject:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn]];
     [keyTimes addObject:[NSNumber numberWithFloat:0.0f]];
