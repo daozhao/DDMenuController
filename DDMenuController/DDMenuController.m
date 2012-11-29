@@ -36,8 +36,8 @@
 #define kMenuBounceOffset 10.0f
 #define kMenuBounceDuration .3f
 #define kMenuSlideDuration .3f
-#define KLeftTransformMakeRotation  -M_PI
-#define KRightTransformMakeRotation M_PI
+#define KLeftTransformMakeRotation  M_PI
+#define KRightTransformMakeRotation -M_PI
 
 
 CGFloat const DDMenuControllerDefaultLeftOverlayWidth = kMenuLeftOverlayWidth;
@@ -329,15 +329,15 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
         _rootViewController.view.frame = frame;
         
         if ( frame.origin.x > 0.0f ){
-            for (UIView *view in self.leftButtonViewForTransitionArray) {
-                view.transform = CGAffineTransformMakeRotation(KLeftTransformMakeRotation * (frame.origin.x /( kScreenWidth - self.leftOverlayWidth)));
-            }
             self.transformRotationStatus = KLeftTransformMakeRotation * (frame.origin.x /( kScreenWidth - self.leftOverlayWidth));
-        } else if ( frame.origin.x < 0.0f) {
-            for (UIView *view in self.rightButtonViewForTransitionArray) {
-                view.transform = CGAffineTransformMakeRotation(KRightTransformMakeRotation * (frame.origin.x /( kScreenWidth - self.rightOverlayWidth)));
+            for (UIView *view in self.leftButtonViewForTransitionArray) {
+                view.transform = CGAffineTransformMakeRotation(self.transformRotationStatus);
             }
-            self.transformRotationStatus = KRightTransformMakeRotation * (frame.origin.x /( kScreenWidth - self.rightOverlayWidth));
+        } else if ( frame.origin.x < 0.0f) {
+            self.transformRotationStatus = -KRightTransformMakeRotation * (frame.origin.x /( kScreenWidth - self.rightOverlayWidth));
+            for (UIView *view in self.rightButtonViewForTransitionArray) {
+                view.transform = CGAffineTransformMakeRotation(self.transformRotationStatus);
+            }
         }
         
         if (frame.origin.x > 0.0f && !_menuFlags.showingLeftView) {
@@ -453,11 +453,9 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
             if (completion == DDMenuPanCompletionLeft) {
                 [values addObject:[NSValue valueWithCGPoint:CGPointMake(((width/2) + span) + kMenuBounceOffset, pos.y)]];
                 [valuesTransform addObject:[NSNumber numberWithFloat:(KLeftTransformMakeRotation-self.transformRotationStatus)/2]];
-         //[valuesTransform addObject:[NSValue valueWithCGAffineTransform:CGAffineTransformMakeRotation(KLeftTransformMakeRotation/2)]];
             } else if (completion == DDMenuPanCompletionRight) {
                 [values addObject:[NSValue valueWithCGPoint:CGPointMake(-((width/2) - (self.rightOverlayWidth-kMenuBounceOffset)), pos.y)]];
                 [valuesTransform addObject:[NSNumber numberWithFloat:(KRightTransformMakeRotation-self.transformRotationStatus)/2]];
-                //[valuesTransform addObject:[NSValue valueWithCGAffineTransform:CGAffineTransformMakeRotation(KRightTransformMakeRotation/2)]];
             } else {
                 // depending on which way we're panning add a bounce offset
                 if (_panDirection == DDMenuPanDirectionLeft) {
@@ -471,14 +469,11 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
         if (completion == DDMenuPanCompletionLeft) {
             [values addObject:[NSValue valueWithCGPoint:CGPointMake((width/2) + span, pos.y)]];
             [valuesTransform addObject:[NSNumber numberWithFloat:KLeftTransformMakeRotation]];
-            //[valuesTransform addObject:[NSValue valueWithCGAffineTransform:CGAffineTransformMakeRotation(KLeftTransformMakeRotation)]];
         } else if (completion == DDMenuPanCompletionRight) {
             [values addObject:[NSValue valueWithCGPoint:CGPointMake(-((width/2) - self.rightOverlayWidth), pos.y)]];
-            [valuesTransform addObject:[NSNumber numberWithFloat: - KRightTransformMakeRotation]];
-            //[valuesTransform addObject:[NSValue valueWithCGAffineTransform:CGAffineTransformMakeRotation(KRightTransformMakeRotation)]];
+            [valuesTransform addObject:[NSNumber numberWithFloat:  KRightTransformMakeRotation]];
         } else {
             [valuesTransform addObject:[NSNumber numberWithFloat:0]];
-            //[valuesTransform addObject:[NSValue valueWithCGAffineTransform:CGAffineTransformMakeRotation(0)]];
             [values addObject:[NSValue valueWithCGPoint:CGPointMake(width/2, pos.y)]];
         }
         
@@ -517,6 +512,7 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
         [timingFunctions release];
         [keyTimes release];
         [values release];
+        [valuesTransform release];
         
 		//[self showRootController:YES];
 		//[self.view setUserInteractionEnabled:YES];
@@ -590,7 +586,32 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
 
     CGRect frame = _rootViewController.view.frame;
     frame.origin.x = 0.0f;
-
+    
+    //_rootViewController.view.userInteractionEnabled = YES;
+    if (animated){
+        
+        if (_menuFlags.showingLeftView ) {
+            [self showControllerAnimation:frame rotationsView:self.leftButtonViewForTransitionArray rotationsValue:0.0f];
+        } else if (_menuFlags.showingLeftView ) {
+            [self showControllerAnimation:frame rotationsView:self.rightButtonViewForTransitionArray rotationsValue:0.0f];
+        }
+    } else {
+        _rootViewController.view.frame = frame;
+        for (UIView *view in self.leftButtonViewForTransitionArray) {
+            view.transform = CGAffineTransformMakeRotation(0.0f);
+        }
+        for (UIView *view in self.rightButtonViewForTransitionArray) {
+            view.transform = CGAffineTransformMakeRotation(0.0f);
+        }
+        //[_tap setEnabled:NO];
+    }
+   /*
+    if ( self.mustinitTouchAction ) {
+        self.mustinitTouchAction = NO;
+        [self performSelectorOnMainThread:@selector(initTouchAction) withObject:nil waitUntilDone:NO];
+    }
+    */
+/*
     BOOL _enabled = [UIView areAnimationsEnabled];
     if (!animated) 
         [UIView setAnimationsEnabled:NO];
@@ -626,16 +647,6 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
         
         _menuFlags.showingLeftView = NO;
         _menuFlags.showingRightView = NO;
-        /*
-        if (_leftViewController && _leftViewController.view.superview)
-            [_leftViewController.view performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.3f];
-        
-        if (_rightViewController && _rightViewController.view.superview) 
-            [_rightViewController.view performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.3f];
-        
-        _menuFlags.showingLeftView = NO;
-        _menuFlags.showingRightView = NO;
-         */
 
         [self showShadow:NO];
         
@@ -648,8 +659,8 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
     
     if (!animated)
         [UIView setAnimationsEnabled:_enabled];    
+ */
 	
-	//[_pan setEnabled:NO];
 }
 
 - (void)showLeftController:(BOOL)animated 
@@ -680,36 +691,20 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
     //frame.origin.x = kScreenWidth - self.leftOverlayWidth;
     frame.origin.x = CGRectGetMaxX(view.frame) - self.leftOverlayWidth;
     
-    BOOL _enabled = [UIView areAnimationsEnabled];
-    if (!animated)
-        [UIView setAnimationsEnabled:NO];
-    
-	// Add alpha fade here
-	//self.leftViewController.view.alpha = 0.2;
     _rootViewController.view.userInteractionEnabled = NO;
-    [UIView animateWithDuration:.3 animations:
-	^
-	{
-		//self.leftViewController.view.alpha = 1.0;
+    if (animated){
+        [self showControllerAnimation:frame rotationsView:self.leftButtonViewForTransitionArray rotationsValue:KLeftTransformMakeRotation];
+    } else {
         _rootViewController.view.frame = frame;
         for (UIView *view in self.leftButtonViewForTransitionArray) {
             view.transform = CGAffineTransformMakeRotation(KLeftTransformMakeRotation);
         }
-    }
-					 completion:
-	 ^(BOOL finished) 
-	{
-		//[_pan setEnabled:YES];
         [_tap setEnabled:YES];
-    }];
-    
-    if (!animated) 
-	{
-        [UIView setAnimationsEnabled:_enabled];
     }
 }
 
-- (void)showRightController:(BOOL)animated 
+
+- (void)showRightController:(BOOL)animated
 {
     if (!_menuFlags.canShowRight) return;
     
@@ -731,10 +726,23 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
 	frame.size.width = self.menuFullWidth;
     view.frame = frame;
     [self.view insertSubview:view atIndex:0];
+    //[self.rightViewController viewWillAppear:animated];
     
     frame = _rootViewController.view.frame;
     frame.origin.x = -(frame.size.width - self.rightOverlayWidth);
-    
+   
+    /*
+    _rootViewController.view.userInteractionEnabled = NO;
+    if (animated){
+        [self showControllerAnimation:frame rotationsView:self.rightButtonViewForTransitionArray rotationsValue:KRightTransformMakeRotation];
+    } else {
+        _rootViewController.view.frame = frame;
+        for (UIView *view in self.rightButtonViewForTransitionArray) {
+            view.transform = CGAffineTransformMakeRotation(KRightTransformMakeRotation);
+        }
+        [_tap setEnabled:YES];
+    }
+    */
     BOOL _enabled = [UIView areAnimationsEnabled];
     if (!animated) 
         [UIView setAnimationsEnabled:NO];
@@ -761,6 +769,85 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
     }
 }
 
+-(void) showControllerAnimation:(CGRect)toFrame rotationsView:(NSArray *) viewTransitionArray rotationsValue:(CGFloat) rotationsValue
+{
+    [CATransaction begin];
+    [CATransaction setCompletionBlock:^{
+        
+        _rootViewController.view.frame = toFrame;
+        [_rootViewController.view.layer removeAllAnimations];
+        
+        for (UIView *view in viewTransitionArray) {
+            [view.layer removeAllAnimations];
+            view.transform = CGAffineTransformMakeRotation(rotationsValue);
+        }
+        [self.view setUserInteractionEnabled:YES];
+        [_tap setEnabled:YES];
+        
+        if ( _rootViewController.view.userInteractionEnabled ){
+            if (_leftViewController && _leftViewController.view.superview) {
+                [_leftViewController.view removeFromSuperview];
+            }
+            
+            if (_rightViewController && _rightViewController.view.superview) {
+                [_rightViewController.view removeFromSuperview];
+            }
+            
+            _menuFlags.showingLeftView = NO;
+            _menuFlags.showingRightView = NO;
+            
+            [_tap setEnabled:NO];
+            [self showShadow:NO];
+        }
+    }];
+    
+    CGPoint pos = _rootViewController.view.layer.position;
+    CGFloat duration = kMenuSlideDuration; // default duration with 0 velocity
+    
+    CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"position"];
+    CAKeyframeAnimation *animationTransform = [CAKeyframeAnimation animationWithKeyPath:@"transform.rotation.z"];
+    
+    NSMutableArray *keyTimes = [[NSMutableArray alloc] initWithCapacity: 2];
+    NSMutableArray *values = [[NSMutableArray alloc] initWithCapacity: 2];
+    NSMutableArray *valuesTransform = [[NSMutableArray alloc] initWithCapacity:2];
+    NSMutableArray *timingFunctions = [[NSMutableArray alloc] initWithCapacity:2];
+    
+    [values addObject:[NSValue valueWithCGPoint:pos]];
+    [values addObject:[NSValue valueWithCGPoint:CGPointMake(toFrame.origin.x + toFrame.size.width/2, toFrame.origin.y + toFrame.size.height/2)]];
+    [valuesTransform addObject:[NSNumber numberWithFloat:0]];
+    [valuesTransform addObject:[NSNumber numberWithFloat:rotationsValue]];
+    
+    [timingFunctions addObject:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn]];
+    [keyTimes addObject:[NSNumber numberWithFloat:0.0f]];
+   
+    [timingFunctions addObject:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut]];
+    [keyTimes addObject:[NSNumber numberWithFloat:1.0f]];
+    
+    animation.timingFunctions = timingFunctions;
+    animation.keyTimes = keyTimes;
+    animation.values = values;
+    animation.duration = duration;   
+    animation.removedOnCompletion = NO;
+    animation.fillMode = kCAFillModeForwards;
+    [_rootViewController.view.layer addAnimation:animation forKey:nil];
+    
+    animationTransform.timingFunctions = timingFunctions;
+    animationTransform.keyTimes = keyTimes;
+    animationTransform.values = valuesTransform;
+    animationTransform.duration = duration;
+    animationTransform.removedOnCompletion = NO;
+    animationTransform.fillMode = kCAFillModeForwards;
+    
+    for (UIView *view in viewTransitionArray) {
+        [view.layer addAnimation:animationTransform forKey:nil];
+    }
+   
+    [CATransaction commit];
+    [timingFunctions release];
+    [keyTimes release];
+    [values release];
+    [valuesTransform release];
+}
 
 #pragma mark Setters
 

@@ -50,7 +50,7 @@
 }
 - (NSArray *)getLeftButtonViewForTransitionArray{
     //return nil;
-    return [NSArray arrayWithObjects:self.leftMenuBtn, nil];
+    return [NSArray arrayWithObjects:self.leftMenuBtn,self.leftMenuBtn2, nil];
 }
 
 - (NSArray *)getRightButtonViewForTapArray{
