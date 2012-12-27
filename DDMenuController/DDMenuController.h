@@ -25,6 +25,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ARCSupporDefine.h"
 
 typedef enum {
     DDMenuPanDirectionLeft = 0,

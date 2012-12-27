@@ -31,6 +31,7 @@
 		4479DCD316635076003BFB5F /* MainController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MainController.m; path = MainController/MainController.m; sourceTree = "<group>"; };
 		4479DCD416635076003BFB5F /* MainController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MainController.xib; path = MainController/MainController.xib; sourceTree = "<group>"; };
 		4479DCD81663512D003BFB5F /* zxy.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = zxy.jpeg; sourceTree = "<group>"; };
+		4487BF42168C2ADD0021625D /* ARCSupporDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ARCSupporDefine.h; path = ../../DDMenuController/ARCSupporDefine.h; sourceTree = "<group>"; };
 		CF9AB79F1538E6F90019E484 /* DDMenuController-Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "DDMenuController-Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF9AB7A31538E6F90019E484 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		CF9AB7A51538E6F90019E484 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -69,6 +70,7 @@
 		4479DCB91663029E003BFB5F /* DDMenuController */ = {
 			isa = PBXGroup;
 			children = (
+				4487BF42168C2ADD0021625D /* ARCSupporDefine.h */,
 				4479DCBA166302AE003BFB5F /* DDMenuController.h */,
 				4479DCBB166302AE003BFB5F /* DDMenuController.m */,
 			);
@@ -286,6 +288,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_WARN_OBJCPP_ARC_ABI = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -310,6 +313,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_WARN_OBJCPP_ARC_ABI = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -327,6 +331,8 @@
 		CF9AB7B81538E6F90019E484 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_OBJCPP_ARC_ABI = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DDMenuController-Example/DDMenuController-Example-Prefix.pch";
 				INFOPLIST_FILE = "DDMenuController-Example/DDMenuController-Example-Info.plist";
@@ -339,6 +345,8 @@
 		CF9AB7B91538E6F90019E484 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_OBJCPP_ARC_ABI = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DDMenuController-Example/DDMenuController-Example-Prefix.pch";
 				INFOPLIST_FILE = "DDMenuController-Example/DDMenuController-Example-Info.plist";

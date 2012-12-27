@@ -668,7 +668,7 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
 {
     if ( _rightViewController != rightController ){
         [_rightViewController release];
-        _rightViewController = [rightController retain];
+        _rightViewController = [rightController don_retain];
     }
     
     self.autoRightButtonImageName = name;
@@ -684,7 +684,7 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
 {
     if ( _leftViewController != leftController ){
         [_leftViewController release];
-        _leftViewController = [leftController retain];
+        _leftViewController = [leftController don_retain];
     }
     
     self.autoLeftButtonImageName = name;
@@ -700,7 +700,7 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
             [_rootViewController.view removeFromSuperview];
             [_rootViewController release];
         }
-        _rootViewController = [rootController retain];
+        _rootViewController = [rootController don_retain];
     }
     if (_rootViewController && _rootViewController.view.superview != self.view ) {
         UIView *view = _rootViewController.view;
@@ -711,7 +711,7 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
         UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pan:)];
         pan.delegate = (id<UIGestureRecognizerDelegate>)self;
         [view addGestureRecognizer:pan];
-        _pan = [pan retain];
+        _pan = [pan don_retain];
         [pan release];
         
         self.leftButtonViewForTapArray = nil;
