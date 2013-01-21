@@ -105,6 +105,8 @@ UIKIT_EXTERN CGFloat const DDMenuControllerDefaultRightOverlayWidth;
 @property(nonatomic,readonly) UIPanGestureRecognizer *pan;
 
 @property(nonatomic, readonly) MenuFlags menuFlags;
+@property(nonatomic) Boolean canShowLeft;
+@property(nonatomic) Boolean canShowRight;
 
 - (void)setRootController:(UIViewController *)controller animated:(BOOL)animated; // used to push a new controller on the stack
 - (void)setLeftViewController:(UIViewController *)leftController autoButtonIamgeName:(NSString *) name;

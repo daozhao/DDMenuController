@@ -71,8 +71,34 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
 @synthesize tap=_tap;
 @synthesize pan=_pan;
 
+@synthesize canShowLeft;
+@synthesize canShowRight;
+
 
 @synthesize menuFlags = _menuFlags;
+
+
+- (Boolean) canShowLeft
+{
+    return self.menuFlags.canShowLeft;
+}
+
+- (void) setCanShowLeft:(Boolean)isShow
+{
+    _menuFlags.canShowLeft = isShow;
+    [self refreshNavButtons];
+}
+
+- (Boolean) canShowRight
+{
+    return self.menuFlags.canShowRight;
+}
+
+- (void) setCanShowRight:(Boolean)isShow
+{
+    _menuFlags.canShowRight = isShow;
+    [self refreshNavButtons];
+}
 
 - (id)initWithRootViewController:(UIViewController*)controller 
 {
@@ -320,6 +346,12 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
             return;
         }
         if ( DDMenuPanDirectionRight == leftOrRight && translation.x > 0 ) {
+            return;
+        }
+        if ( !self.canShowRight && translation.x < 0 ) {
+            return;
+        }
+        if ( !self.canShowLeft && translation.x > 0 ) {
             return;
         }
 		

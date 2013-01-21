@@ -35,13 +35,15 @@
     //rootController.leftViewController = leftController;
     
     RightController *rightController = [[RightController alloc] init];
-    //[rootController setRightViewController:rightController autoButtonIamgeName:@"nav_menu_icon.png"];
+//    [rootController setRightViewController:rightController autoButtonIamgeName:@"nav_menu_icon.png"];
     rootController.rightViewController = rightController;
     
     self.window.rootViewController = rootController;
     
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
+    
+//    rootController.canShowRight = NO;
     return YES;
 }
 
