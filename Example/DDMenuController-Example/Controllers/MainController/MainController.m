@@ -64,4 +64,16 @@
     //return [NSArray arrayWithObjects:self.rightMenuBtn, nil];
 }
 
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
+{
+    if ( UIDeviceOrientationPortraitUpsideDown == toInterfaceOrientation )
+    {
+        return NO;
+    }
+    return YES;
+}
+
+
+
 @end
