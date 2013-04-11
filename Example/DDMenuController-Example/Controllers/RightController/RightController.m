@@ -36,8 +36,9 @@
     if (!_tableView) {
         
         CGRect frame = self.view.bounds;
-        frame.origin.x = 40.0f;
-        frame.size.width -= 40.0f;
+//        frame.origin.x = 40.0f;
+//        frame.size.width -= 40.0f;
+//        self.view.bounds = frame;
         
         UITableView *tableView = [[UITableView alloc] initWithFrame:frame style:UITableViewStylePlain];
         tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -45,6 +46,7 @@
         tableView.dataSource = (id<UITableViewDataSource>)self;
         tableView.backgroundColor = [UIColor scrollViewTexturedBackgroundColor];
         [self.view addSubview:tableView];
+//        self.view = tableView;
         self.tableView = tableView;
         
     }

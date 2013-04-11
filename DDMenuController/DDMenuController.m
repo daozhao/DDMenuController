@@ -27,21 +27,16 @@
 #import "DDMenuController.h"
 #import <QuartzCore/QuartzCore.h>
 
-#define kMenuFullWidth 320.0f
-#define kScreenWidth 320.0f
 #define kMenuLeftDisplayedWidth 200.0f
 #define kMenuRightDisplayedWidth 280.0f
-#define kMenuLeftOverlayWidth (320.0f - kMenuLeftDisplayedWidth) 
-#define kMenuRightOverlayWidth (320.0f - kMenuRightDisplayedWidth)
+
 #define kMenuBounceOffset 10.0f
 #define kMenuBounceDuration .3f
 #define kMenuSlideDuration .3f
+
 #define KLeftTransformMakeRotation  M_PI
 #define KRightTransformMakeRotation -M_PI
 
-
-CGFloat const DDMenuControllerDefaultLeftOverlayWidth = kMenuLeftOverlayWidth;
-CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
 
 @implementation DDMenuController
 
@@ -63,9 +58,6 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
 
 @synthesize mustinitTouchAction;
 
-@synthesize leftOverlayWidth = _leftOverlayWidth;
-@synthesize rightOverlayWidth = _rightOverlayWidth;
-@synthesize menuFullWidth = _menuFullWidth;
 @synthesize transformRotationStatus = _transformRotationStatus;
 
 @synthesize tap=_tap;
@@ -131,11 +123,6 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
 - (void)viewDidLoad 
 {
     [super viewDidLoad];
-	
-	// Set Defaults
-	[self setLeftOverlayWidth:DDMenuControllerDefaultLeftOverlayWidth];
-	[self setRightOverlayWidth:DDMenuControllerDefaultRightOverlayWidth];
-	[self setMenuFullWidth:kMenuFullWidth];
 	
     [self setRootViewController:_rootViewController]; // reset root
     
@@ -279,10 +266,12 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
         CGRect frame = self.view.bounds;
         if (_menuFlags.showingLeftView) 
 		{
-            frame.origin.x = frame.size.width - self.leftOverlayWidth;
+            frame.origin.x = kMenuLeftDisplayedWidth; // frame.size.width - self.leftOverlayWidth;
+            [self showLeftController:NO];
         } else if (_menuFlags.showingRightView) 
 		{
-            frame.origin.x = -(frame.size.width - self.rightOverlayWidth);
+            frame.origin.x = - kMenuRightDisplayedWidth; // -(frame.size.width - self.rightOverlayWidth);
+            [self showRightController:NO];
         }
         _rootViewController.view.frame = frame;
         _rootViewController.view.autoresizingMask = self.view.autoresizingMask;
@@ -357,17 +346,20 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
 		
         CGRect frame = CGRectMake(_panOriginX + translation.x, _rootViewController.view.frame.origin.y, _rootViewController.view.bounds.size.width, _rootViewController.view.bounds.size.height);
         
-        _rootViewController.view.frame = frame;
+        if ( frame.origin.x < kMenuLeftDisplayedWidth && frame.origin.x > - kMenuRightDisplayedWidth ){
+            _rootViewController.view.frame = frame;
         
-        if ( frame.origin.x > 0.0f ){
-            self.transformRotationStatus = KLeftTransformMakeRotation * (frame.origin.x /( kScreenWidth - self.leftOverlayWidth));
-            for (UIView *view in self.leftButtonViewForTransitionArray) {
-                view.transform = CGAffineTransformMakeRotation(self.transformRotationStatus);
-            }
-        } else if ( frame.origin.x < 0.0f) {
-            self.transformRotationStatus = -KRightTransformMakeRotation * (frame.origin.x /( kScreenWidth - self.rightOverlayWidth));
-            for (UIView *view in self.rightButtonViewForTransitionArray) {
-                view.transform = CGAffineTransformMakeRotation(self.transformRotationStatus);
+            if ( frame.origin.x > 0.0f ){
+                
+                self.transformRotationStatus = KLeftTransformMakeRotation * (frame.origin.x /kMenuLeftDisplayedWidth );
+                for (UIView *view in self.leftButtonViewForTransitionArray) {
+                    view.transform = CGAffineTransformMakeRotation(self.transformRotationStatus);
+                }
+            } else if ( frame.origin.x < 0.0f) {
+                self.transformRotationStatus = -KRightTransformMakeRotation * (frame.origin.x /kMenuRightDisplayedWidth );
+                for (UIView *view in self.rightButtonViewForTransitionArray) {
+                    view.transform = CGAffineTransformMakeRotation(self.transformRotationStatus);
+                }
             }
         }
         
@@ -380,7 +372,7 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
             if (_menuFlags.canShowLeft) {
                 _menuFlags.showingLeftView = YES;
                 CGRect frame = self.view.bounds;
-				frame.size.width = kMenuFullWidth;
+				frame.size.width = kMenuLeftDisplayedWidth; // kMenuFullWidth;
                 self.leftViewController.view.frame = frame;
                 [self.view insertSubview:self.leftViewController.view atIndex:0];
             } else {
@@ -395,8 +387,10 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
             if (_menuFlags.canShowRight) {
                 _menuFlags.showingRightView = YES;
                 CGRect frame = self.view.bounds;
-				frame.origin.x += frame.size.width - kMenuFullWidth;
-				frame.size.width = kMenuFullWidth;
+                
+                frame.origin.x = frame.size.width - kMenuRightDisplayedWidth;
+                frame.size.width = kMenuRightDisplayedWidth;
+                
                 self.rightViewController.view.frame = frame;
                 [self.view insertSubview:self.rightViewController.view atIndex:0];
             } else {
@@ -405,14 +399,7 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
             
         }
 		
-        /*
-		CGFloat percentOpen = (_panOriginX + translation.x) / kMenuLeftDisplayedWidth;
-		// Damping factor on alpha transform
-		CGFloat percentAlpha = (percentOpen / 1.2);
-		self.leftViewController.view.alpha = MIN(1, percentAlpha);
-         */
     } else if (gesture.state == UIGestureRecognizerStateEnded || gesture.state == UIGestureRecognizerStateCancelled) {
-//        else if (gesture.state == UIGestureRecognizerStateEnded || gesture.state == UIGestureRecognizerStateCancelled || gesture.state == UIGestureRecognizerStateRecognized || gesture.state == UIGestureRecognizerStateFailed) {
         
         //  Finishing moving to left, right or root view with current pan velocity
         if (_panDirection == DDMenuPanDirectionRight && _menuFlags.showingLeftView) {
@@ -535,15 +522,13 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
 
     UIView *view = self.leftViewController.view;
 	CGRect frame = self.view.bounds;
-	//frame.size.width =  kScreenWidth - self.leftOverlayWidth;
-    frame.size.width =  self.menuFullWidth;
+    frame.size.width =  kMenuLeftDisplayedWidth; 
     view.frame = frame;
     [self.view insertSubview:view atIndex:0];
     [self.leftViewController viewWillAppear:animated];
     
     frame = _rootViewController.view.frame;
-    //frame.origin.x = kScreenWidth - self.leftOverlayWidth;
-    frame.origin.x = CGRectGetMaxX(view.frame) - self.leftOverlayWidth;
+    frame.origin.x =  kMenuLeftDisplayedWidth;
     
     _rootViewController.view.userInteractionEnabled = NO;
     if (animated){
@@ -575,16 +560,19 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
     [self showShadow:YES];
 
     UIView *view = self.rightViewController.view;
+    
     CGRect frame = self.view.bounds;
-	frame.origin.x += frame.size.width - self.menuFullWidth;
-	frame.size.width = self.menuFullWidth;
+	frame.origin.x = frame.size.width - kMenuRightDisplayedWidth ;
+	frame.size.width = kMenuRightDisplayedWidth;
+    
     view.frame = frame;
+    
     [self.view insertSubview:view atIndex:0];
     [self.rightViewController viewWillAppear:animated];
     
     frame = _rootViewController.view.frame;
-    frame.origin.x = -(frame.size.width - self.rightOverlayWidth);
-   
+    frame.origin.x = - kMenuRightDisplayedWidth ; //self.rightOverlayWidth;
+    
     _rootViewController.view.userInteractionEnabled = NO;
     if (animated){
         [self showControllerAnimation:frame rotationsView:self.rightButtonViewForTransitionArray rotationsValue:KRightTransformMakeRotation];
@@ -841,8 +829,10 @@ CGFloat const DDMenuControllerDefaultRightOverlayWidth = kMenuRightOverlayWidth;
         [UIView animateWithDuration:0.25f animations:
 		 ^
 		 {			 
-			 if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation])) 
-				self.view.transform = CGAffineTransformConcat(currentTransform, CGAffineTransformMakeTranslation(0, self.rightOverlayWidth));
+			 if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]))
+                 //TODO: Please check.
+				self.view.transform = CGAffineTransformConcat(currentTransform, CGAffineTransformMakeTranslation(0,kMenuRightDisplayedWidth));
+//				self.view.transform = CGAffineTransformConcat(currentTransform, CGAffineTransformMakeTranslation(0, self.rightOverlayWidth));
 			 else
                  self.view.transform = CGAffineTransformConcat(currentTransform, CGAffineTransformMakeTranslation(kMenuRightDisplayedWidth, 0));
 		 }

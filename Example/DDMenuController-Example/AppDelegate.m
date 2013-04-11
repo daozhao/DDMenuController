@@ -42,7 +42,7 @@
     
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
-    
+//   can set right menu to disable
 //    rootController.canShowRight = NO;
     return YES;
 }
