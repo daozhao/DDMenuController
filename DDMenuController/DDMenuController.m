@@ -65,6 +65,7 @@
 
 @synthesize canShowLeft;
 @synthesize canShowRight;
+@synthesize autoShowLeftOnIpadAtLandscape;
 
 
 @synthesize menuFlags = _menuFlags;
@@ -98,6 +99,7 @@
 	{
         _rootViewController = controller;
         self.mustinitTouchAction = NO;
+        self.autoShowLeftOnIpadAtLandscape = YES;
     }
     return self;
 }
@@ -106,7 +108,8 @@
 {
     if ((self = [super init])) 
 	{
-        self.mustinitTouchAction = NO;
+//        self.mustinitTouchAction = NO;
+//        self.autoShowLeftOnIpadAtLandscape = YES;
         
     }
     return self;
@@ -137,6 +140,7 @@
     
     self.mustinitTouchAction = NO;
     [self performSelectorOnMainThread:@selector(initTouchAction) withObject:nil waitUntilDone:NO];
+//    NSLog(@"is ipad:%d",ISIPAD);
     
 }
 
@@ -255,6 +259,20 @@
     }
 }
 
+-(void)setRootViewFrame
+{
+    CGRect frame = self.view.bounds;
+    _rootViewController.view.frame = frame;
+    _rootViewController.view.autoresizingMask = self.view.autoresizingMask;
+    
+    if ( self.autoShowLeftOnIpadAtLandscape && SELF_VIEWCONTROLER_IS_IPAD_LANDSCAPE ){
+        _rootViewController.view.frame= CGRectMake(frame.origin.x + kMenuLeftDisplayedWidth, frame.origin.y,frame.size.width - kMenuLeftDisplayedWidth,frame.size.height );
+        
+    }
+    
+    
+}
+
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation 
 {
     [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
@@ -263,18 +281,24 @@
 	{
         [_rootViewController didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 
-        CGRect frame = self.view.bounds;
-        if (_menuFlags.showingLeftView) 
+        [self setRootViewFrame];
+//        CGRect frame = self.view.bounds;
+//        _rootViewController.view.frame = frame;
+//        _rootViewController.view.autoresizingMask = self.view.autoresizingMask;
+        
+        if (_menuFlags.showingLeftView)
 		{
-            frame.origin.x = kMenuLeftDisplayedWidth; // frame.size.width - self.leftOverlayWidth;
+//            frame.origin.x = kMenuLeftDisplayedWidth; // frame.size.width - self.leftOverlayWidth;
             [self showLeftController:NO];
-        } else if (_menuFlags.showingRightView) 
-		{
-            frame.origin.x = - kMenuRightDisplayedWidth; // -(frame.size.width - self.rightOverlayWidth);
+            
+        } else if (_menuFlags.showingRightView) {
+            
+//            frame.origin.x = - kMenuRightDisplayedWidth; // -(frame.size.width - self.rightOverlayWidth);
             [self showRightController:NO];
+        } else if (self.autoShowLeftOnIpadAtLandscape && SELF_VIEWCONTROLER_IS_IPAD_LANDSCAPE ){
+            [self showLeftController:NO];
         }
-        _rootViewController.view.frame = frame;
-        _rootViewController.view.autoresizingMask = self.view.autoresizingMask;
+        
         
         [self showShadow:(_rootViewController.view.layer.shadowOpacity!=0.0f)];
     }
@@ -282,6 +306,7 @@
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration 
 {
+//    NSLog(@"is ipad:%d",ISIPAD);
 	[super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
 
     if (_rootViewController) 
@@ -307,6 +332,12 @@
 
 - (void)pan:(UIPanGestureRecognizer*)gesture leftOrRight:(DDMenuPanDirection) leftOrRight
 {
+    float zeroX = 0.0f;
+    
+    if ( self.autoShowLeftOnIpadAtLandscape && SELF_VIEWCONTROLER_IS_IPAD_LANDSCAPE ){
+        zeroX = kMenuLeftDisplayedWidth;
+    }
+
     if (gesture.state == UIGestureRecognizerStateBegan) 
 	{
         [self showShadow:YES];
@@ -331,39 +362,39 @@
 		
         CGPoint translation = [gesture translationInView:self.view];
         
-        if ( DDMenuPanDirectionLeft == leftOrRight && translation.x < 0 ) {
+        if ( DDMenuPanDirectionLeft == leftOrRight && translation.x < zeroX ) {
             return;
         }
-        if ( DDMenuPanDirectionRight == leftOrRight && translation.x > 0 ) {
+        if ( DDMenuPanDirectionRight == leftOrRight && translation.x > zeroX ) {
             return;
         }
-        if ( !self.canShowRight && translation.x < 0 ) {
+        if ( !self.canShowRight && translation.x < zeroX  ) {
             return;
         }
-        if ( !self.canShowLeft && translation.x > 0 ) {
+        if ( !self.canShowLeft && translation.x > zeroX ) {
             return;
         }
 		
         CGRect frame = CGRectMake(_panOriginX + translation.x, _rootViewController.view.frame.origin.y, _rootViewController.view.bounds.size.width, _rootViewController.view.bounds.size.height);
         
-        if ( frame.origin.x < kMenuLeftDisplayedWidth && frame.origin.x > - kMenuRightDisplayedWidth ){
+        if ( frame.origin.x < kMenuLeftDisplayedWidth && frame.origin.x > zeroX - kMenuRightDisplayedWidth ){
             _rootViewController.view.frame = frame;
         
-            if ( frame.origin.x > 0.0f ){
+            if ( frame.origin.x > zeroX ){
                 
                 self.transformRotationStatus = KLeftTransformMakeRotation * (frame.origin.x /kMenuLeftDisplayedWidth );
                 for (UIView *view in self.leftButtonViewForTransitionArray) {
                     view.transform = CGAffineTransformMakeRotation(self.transformRotationStatus);
                 }
-            } else if ( frame.origin.x < 0.0f) {
-                self.transformRotationStatus = -KRightTransformMakeRotation * (frame.origin.x /kMenuRightDisplayedWidth );
+            } else if ( frame.origin.x < zeroX) {
+                self.transformRotationStatus = -KRightTransformMakeRotation * ((frame.origin.x - zeroX) /kMenuRightDisplayedWidth );
                 for (UIView *view in self.rightButtonViewForTransitionArray) {
                     view.transform = CGAffineTransformMakeRotation(self.transformRotationStatus);
                 }
             }
         }
         
-        if (frame.origin.x > 0.0f && !_menuFlags.showingLeftView) {
+        if (frame.origin.x > zeroX && !_menuFlags.showingLeftView) {
             if(_menuFlags.showingRightView) {
                 _menuFlags.showingRightView = NO;
                 [self.rightViewController.view removeFromSuperview];
@@ -378,10 +409,12 @@
             } else {
                 frame.origin.x = 0.0f; // ignore right view if it's not set
             }
-        } else if (frame.origin.x < 0.0f && !_menuFlags.showingRightView) {
+        } else if (frame.origin.x < zeroX && !_menuFlags.showingRightView) {
             if(_menuFlags.showingLeftView) {
-                _menuFlags.showingLeftView = NO;
-                [self.leftViewController.view removeFromSuperview];
+                if ( !(self.autoShowLeftOnIpadAtLandscape && SELF_VIEWCONTROLER_IS_IPAD_LANDSCAPE) ){
+                    _menuFlags.showingLeftView = NO;
+                    [self.leftViewController.view removeFromSuperview];
+                }
             }
             
             if (_menuFlags.canShowRight) {
@@ -394,7 +427,7 @@
                 self.rightViewController.view.frame = frame;
                 [self.view insertSubview:self.rightViewController.view atIndex:0];
             } else {
-                frame.origin.x = 0.0f; // ignore left view if it's not set
+                frame.origin.x = zeroX; // ignore left view if it's not set
             }
             
         }
@@ -402,7 +435,7 @@
     } else if (gesture.state == UIGestureRecognizerStateEnded || gesture.state == UIGestureRecognizerStateCancelled) {
         
         //  Finishing moving to left, right or root view with current pan velocity
-        if (_panDirection == DDMenuPanDirectionRight && _menuFlags.showingLeftView) {
+        if (_panDirection == DDMenuPanDirectionRight && _menuFlags.showingLeftView && !(self.autoShowLeftOnIpadAtLandscape && SELF_VIEWCONTROLER_IS_IPAD_LANDSCAPE) ) {
             [self showLeftController:YES];
         } else if (_panDirection == DDMenuPanDirectionLeft && _menuFlags.showingRightView) {
             [self showRightController:YES];
@@ -460,17 +493,17 @@
 
 - (void)showShadow:(BOOL)val 
 {
-    if (!_rootViewController) return;
-    
-    _rootViewController.view.layer.shadowOpacity = val ? 0.8f : 0.0f;
-    if (val) 
-	{
-        _rootViewController.view.layer.cornerRadius = 4.0f;
-        _rootViewController.view.layer.shadowOffset = CGSizeZero;
-        _rootViewController.view.layer.shadowRadius = 4.0f;
-        _rootViewController.view.layer.shadowPath = [UIBezierPath bezierPathWithRect:self.view.bounds].CGPath;
-    }
-    
+//    if (!_rootViewController) return;
+//    
+//    _rootViewController.view.layer.shadowOpacity = val ? 0.8f : 0.0f;
+//    if (val) 
+//	{
+//        _rootViewController.view.layer.cornerRadius = 4.0f;
+//        _rootViewController.view.layer.shadowOffset = CGSizeZero;
+//        _rootViewController.view.layer.shadowRadius = 4.0f;
+//        _rootViewController.view.layer.shadowPath = [UIBezierPath bezierPathWithRect:self.view.bounds].CGPath;
+//    }
+//    
 }
 
 - (void)showRootController:(BOOL)animated 
@@ -481,12 +514,24 @@
     CGRect frame = _rootViewController.view.frame;
     frame.origin.x = 0.0f;
     
-    if (animated){
+    if ( self.autoShowLeftOnIpadAtLandscape && SELF_VIEWCONTROLER_IS_IPAD_LANDSCAPE
+        && _leftViewController && !_leftViewController.view.superview) {
+        [self showLeftController:animated];
         
-        if (_menuFlags.showingLeftView ) {
-            [self showControllerAnimation:frame rotationsView:self.leftButtonViewForTransitionArray rotationsValue:0.0f];
-        } else if (_menuFlags.showingRightView ) {
+    }
+    
+    if (animated){
+        if (_menuFlags.showingRightView ) {
+            if ( self.autoShowLeftOnIpadAtLandscape && SELF_VIEWCONTROLER_IS_IPAD_LANDSCAPE) {
+                frame.origin.x = kMenuLeftDisplayedWidth;
+                _menuFlags.showingLeftView = YES;
+             }
             [self showControllerAnimation:frame rotationsView:self.rightButtonViewForTransitionArray rotationsValue:0.0f];
+        } else if (_menuFlags.showingLeftView ) {
+            if ( self.autoShowLeftOnIpadAtLandscape && SELF_VIEWCONTROLER_IS_IPAD_LANDSCAPE) {
+                return;
+            }
+            [self showControllerAnimation:frame rotationsView:self.leftButtonViewForTransitionArray rotationsValue:0.0f];
         }
     } else {
         _rootViewController.view.frame = frame;
@@ -506,7 +551,13 @@
 
 - (void)showLeftController:(BOOL)animated 
 {
+//    NSLog(@"Interface Orientation is Landscape:%d",UIInterfaceOrientationIsLandscape(self.interfaceOrientation));
+//    NSLog(@"Interface Orientation is ipad and Landscape:%d",SELF_VIEWCONTROLER_IS_IPAD_LANDSCAPE);
     if (!_menuFlags.canShowLeft) return;
+    
+    if (_menuFlags.showingLeftView  && SELF_VIEWCONTROLER_IS_IPAD_LANDSCAPE) {
+            return;
+    }
     
     if (_rightViewController && _rightViewController.view.superview)
 	{
@@ -519,7 +570,9 @@
 	
     _menuFlags.showingLeftView = YES;
     [self showShadow:YES];
-
+    
+    _rootViewController.view.userInteractionEnabled = NO;
+    
     UIView *view = self.leftViewController.view;
 	CGRect frame = self.view.bounds;
     frame.size.width =  kMenuLeftDisplayedWidth; 
@@ -529,8 +582,13 @@
     
     frame = _rootViewController.view.frame;
     frame.origin.x =  kMenuLeftDisplayedWidth;
+//    RECTLOG(self.view.frame, @" applicationFrame");
+    if ( SELF_VIEWCONTROLER_IS_IPAD_LANDSCAPE ) {
+        frame.size.width = [[UIScreen mainScreen] applicationFrame].size.height - kMenuLeftDisplayedWidth;
+        _rootViewController.view.userInteractionEnabled = YES;
+        
+    }
     
-    _rootViewController.view.userInteractionEnabled = NO;
     if (animated){
         [self showControllerAnimation:frame rotationsView:self.leftButtonViewForTransitionArray rotationsValue:KLeftTransformMakeRotation];
     } else {
@@ -542,15 +600,16 @@
     }
 }
 
-
 - (void)showRightController:(BOOL)animated
 {
     if (!_menuFlags.canShowRight) return;
     
-    if (_leftViewController && _leftViewController.view.superview) 
+    if (_leftViewController && _leftViewController.view.superview && !(SELF_VIEWCONTROLER_IS_IPAD_LANDSCAPE && self.autoShowLeftOnIpadAtLandscape) )
 	{
-        [_leftViewController.view removeFromSuperview];
-        _menuFlags.showingLeftView = NO;
+        if ( !(self.autoShowLeftOnIpadAtLandscape && SELF_VIEWCONTROLER_IS_IPAD_LANDSCAPE) ) {
+            [_leftViewController.view removeFromSuperview];
+            _menuFlags.showingLeftView = NO;
+        }
     }
     
     if (_menuFlags.respondsToWillShowViewController) 
@@ -572,6 +631,13 @@
     
     frame = _rootViewController.view.frame;
     frame.origin.x = - kMenuRightDisplayedWidth ; //self.rightOverlayWidth;
+    if ( SELF_VIEWCONTROLER_IS_IPAD_LANDSCAPE ){
+        frame.origin.x = kMenuLeftDisplayedWidth - kMenuRightDisplayedWidth;
+//        NSLog(@" root view :%@",_rootViewController.view);
+//        NSLog(@" root view subview :%@",_rootViewController.view.subviews);
+//        NSLog(@" root view prerent :%@",_rootViewController.view.superview);
+//        NSLog(@" root view prerent subview :%@",_rootViewController.view.superview.subviews);
+    }
     
     _rootViewController.view.userInteractionEnabled = NO;
     if (animated){
@@ -592,6 +658,7 @@
         
         _rootViewController.view.frame = toFrame;
         [_rootViewController.view.layer removeAllAnimations];
+//        RECTLOG(_rootViewController.view.frame,@" rootView(%@) after move frame",_rootViewController.view);
         
         for (UIView *view in viewTransitionArray) {
             [view.layer removeAllAnimations];
@@ -602,15 +669,16 @@
         
         if ( _rootViewController.view.userInteractionEnabled ){
             if (_leftViewController && _leftViewController.view.superview) {
-                [_leftViewController.view removeFromSuperview];
+                if ( !(self.autoShowLeftOnIpadAtLandscape && SELF_VIEWCONTROLER_IS_IPAD_LANDSCAPE ) ) {
+                    [_leftViewController.view removeFromSuperview];
+                    _menuFlags.showingLeftView = NO;
+                }
             }
             
             if (_rightViewController && _rightViewController.view.superview) {
                 [_rightViewController.view removeFromSuperview];
+                _menuFlags.showingRightView = NO;
             }
-            
-            _menuFlags.showingLeftView = NO;
-            _menuFlags.showingRightView = NO;
             
             [_tap setEnabled:NO];
             [self showShadow:NO];
@@ -725,6 +793,8 @@
     if (_rootViewController && _rootViewController.view.superview != self.view ) {
         UIView *view = _rootViewController.view;
         view.frame = self.view.bounds;
+        self.view.backgroundColor = [UIColor clearColor];
+//        NSLog(@" DDMenuController:%@",self.view);
         [self.view addSubview:view];
         
         [_pan release];
@@ -816,7 +886,7 @@
     
     if (navController == nil) 
 	{
-        NSLog(@"root controller is not a navigation controller.");
+//        NSLog(@"root controller is not a navigation controller.");
         return;
     }
 	

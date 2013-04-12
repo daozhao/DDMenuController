@@ -27,7 +27,7 @@
 {
     [super viewDidLoad];
     self.title = @"main";
-    self.myView.contentSize = CGSizeMake(640, 920);
+//    self.myView.contentSize = CGSizeMake(640, 920);
     // Do any additional setup after loading the view from its nib.
 }
 

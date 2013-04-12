@@ -27,9 +27,18 @@
 #import <UIKit/UIKit.h>
 #import "ARCSupporDefine.h"
 
-//#define RECTPRINTSTR @" Rect(X:%.0f Y:%.0f Width:%.0f height:%.0f) "
-//#define RECTSTRUCT(rect) rect.origin.x,rect.origin.y,rect.size.width,rect.size.height
-//#define RECTLOG(rect,info, ...) NSLog(@"%@:%d:" info RECTPRINTSTR,[[NSString stringWithUTF8String:__FILE__] lastPathComponent],__LINE__,##__VA_ARGS__,RECTSTRUCT(rect))
+#define RECTPRINTSTR @" Rect(X:%.0f Y:%.0f Width:%.0f height:%.0f) "
+#define RECTSTRUCT(rect) rect.origin.x,rect.origin.y,rect.size.width,rect.size.height
+#define RECTLOG(rect,info, ...) NSLog(@"%@:%d:" info RECTPRINTSTR,[[NSString stringWithUTF8String:__FILE__] lastPathComponent],__LINE__,##__VA_ARGS__,RECTSTRUCT(rect))
+
+#define ISIPAD (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+
+#define IS_IPAD_AND_LANDSCAPE(orientation) (ISIPAD && UIInterfaceOrientationIsLandscape(orientation))
+#define SELF_VIEWCONTROLER_IS_IPAD_LANDSCAPE IS_IPAD_AND_LANDSCAPE(self.interfaceOrientation)
+
+//UIDeviceOrientation deviceOrientation = [UIDevice currentDevice].orientation;
+//UIDeviceOrientationIsLandscape(deviceOrientation)
+//UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
 
 typedef enum {
     DDMenuPanDirectionLeft = 0,
@@ -108,6 +117,7 @@ UIKIT_EXTERN CGFloat const DDMenuControllerDefaultRightOverlayWidth;
 @property(nonatomic, readonly) MenuFlags menuFlags;
 @property(nonatomic) Boolean canShowLeft;
 @property(nonatomic) Boolean canShowRight;
+@property(nonatomic) Boolean autoShowLeftOnIpadAtLandscape;
 
 - (void)setRootController:(UIViewController *)controller animated:(BOOL)animated; // used to push a new controller on the stack
 - (void)setLeftViewController:(UIViewController *)leftController autoButtonIamgeName:(NSString *) name;

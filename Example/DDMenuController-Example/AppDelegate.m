@@ -27,6 +27,7 @@
     MainController *mainController = [[MainController alloc] initWithNibName:@"MainController" bundle:nil] ;
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:mainController];
     
+//    DDMenuController *rootController = [[DDMenuController alloc] initWithRootViewController:mainController];
     DDMenuController *rootController = [[DDMenuController alloc] initWithRootViewController:navController];
     _menuController = rootController;
     
@@ -35,8 +36,8 @@
     //rootController.leftViewController = leftController;
     
     RightController *rightController = [[RightController alloc] init];
-//    [rootController setRightViewController:rightController autoButtonIamgeName:@"nav_menu_icon.png"];
-    rootController.rightViewController = rightController;
+    [rootController setRightViewController:rightController autoButtonIamgeName:@"nav_menu_icon.png"];
+//    rootController.rightViewController = rightController;
     
     self.window.rootViewController = rootController;
     
