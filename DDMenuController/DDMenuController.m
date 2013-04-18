@@ -827,33 +827,24 @@
     
     if (_menuFlags.showingLeftView) 
 	{
-        
         [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
-        
         // slide out then come back with the new root
         __block DDMenuController *selfRef = self;
         __block UIViewController *rootRef = _rootViewController;
         CGRect frame = rootRef.view.frame;
-        frame.origin.x = rootRef.view.bounds.size.width;
+        if ( ! SELF_VIEWCONTROLER_IS_IPAD_LANDSCAPE ) {
+            frame.origin.x = rootRef.view.bounds.size.width;
+        }
         
-        [UIView animateWithDuration:.1 animations:
-		^
-		{
-            
+        [UIView animateWithDuration:.1 animations: ^ {
             rootRef.view.frame = frame;
-            
-        } 
-						 completion:
-		 ^(BOOL finished) 
-		{
-            
-            [[UIApplication sharedApplication] endIgnoringInteractionEvents];
-
-            [selfRef setRootViewController:controller];
-            _rootViewController.view.frame = frame;
-            [selfRef showRootController:animated];
-            
-        }];
+         } completion: ^(BOOL finished) {
+             [[UIApplication sharedApplication] endIgnoringInteractionEvents];
+             
+             [selfRef setRootViewController:controller];
+             _rootViewController.view.frame = frame;
+             [selfRef showRootController:animated];
+         }];
     } 
 	else 
 	{
@@ -892,31 +883,11 @@
 	
 	if (_menuFlags.showingRightView) 
 	{
-		CGAffineTransform currentTransform = self.view.transform;
-		
         [navController pushViewController:viewController animated:NO];
-		        
-        [UIView animateWithDuration:0.25f animations:
-		 ^
-		 {			 
-			 if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]))
-                 //TODO: Please check.
-				self.view.transform = CGAffineTransformConcat(currentTransform, CGAffineTransformMakeTranslation(0,kMenuRightDisplayedWidth));
-//				self.view.transform = CGAffineTransformConcat(currentTransform, CGAffineTransformMakeTranslation(0, self.rightOverlayWidth));
-			 else
-                 self.view.transform = CGAffineTransformConcat(currentTransform, CGAffineTransformMakeTranslation(kMenuRightDisplayedWidth, 0));
-		 }
-						 completion:
-		 ^(BOOL finished) 
-		 {
-			 [self showRootController:NO];
-			 self.view.transform = CGAffineTransformIdentity;
-		 }];
-    } 
+        [self showRootController:animated];
+    }
 	else 
 	{
-		
-		
         [navController pushViewController:viewController animated:animated];
     }
 }
