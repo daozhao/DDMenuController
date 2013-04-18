@@ -492,19 +492,21 @@
     return NO;
 }
 
-- (void)showShadow:(BOOL)val 
+- (void)showShadow:(BOOL)val
 {
-//    if (!_rootViewController) return;
-//    
-//    _rootViewController.view.layer.shadowOpacity = val ? 0.8f : 0.0f;
-//    if (val) 
-//	{
-//        _rootViewController.view.layer.cornerRadius = 4.0f;
-//        _rootViewController.view.layer.shadowOffset = CGSizeZero;
-//        _rootViewController.view.layer.shadowRadius = 4.0f;
+    if (!_rootViewController) return;
+    
+    _rootViewController.view.layer.shadowOpacity = val ? 0.8f : 0.0f;
+    if (val) 
+	{
+        _rootViewController.view.layer.cornerRadius = 4.0f;
+        _rootViewController.view.layer.shadowOffset = CGSizeZero;
+        _rootViewController.view.layer.shadowRadius = 4.0f;
+        _rootViewController.view.layer.shadowPath = [UIBezierPath bezierPathWithRect:_rootViewController.view.bounds].CGPath;
+//        _rootViewController.view.layer.shadowPath = [UIBezierPath bezierPathWithRect:_rootViewController.view.frame].CGPath;
 //        _rootViewController.view.layer.shadowPath = [UIBezierPath bezierPathWithRect:self.view.bounds].CGPath;
-//    }
-//    
+    }
+    
 }
 
 - (void)showRootController:(BOOL)animated 
@@ -558,6 +560,7 @@
         && self.autoShowLeftOnIpadAtLandscape && SELF_VIEWCONTROLER_IS_IPAD_LANDSCAPE )  {
         _rootViewController.view.userInteractionEnabled = YES;
         [_tap setEnabled:NO];
+        [self showShadow:YES];
         return;
     }
     
@@ -573,7 +576,6 @@
         [self.delegate menuController:self willShowViewController:self.leftViewController];
 	
     _menuFlags.showingLeftView = YES;
-    [self showShadow:YES];
     
     _rootViewController.view.userInteractionEnabled = NO;
     [_tap setEnabled:YES];
@@ -599,6 +601,7 @@
         [self showControllerAnimation:frame rotationsView:self.leftButtonViewForTransitionArray rotationsValue:KLeftTransformMakeRotation];
     } else {
         _rootViewController.view.frame = frame;
+        [self showShadow:YES];
         for (UIView *view in self.leftButtonViewForTransitionArray) {
             view.transform = CGAffineTransformMakeRotation(KLeftTransformMakeRotation);
         }
@@ -621,7 +624,7 @@
         [self.delegate menuController:self willShowViewController:self.rightViewController];
 
 	_menuFlags.showingRightView = YES;
-    [self showShadow:YES];
+//    [self showShadow:YES];
 
     UIView *view = self.rightViewController.view;
     
@@ -650,6 +653,7 @@
         [self showControllerAnimation:frame rotationsView:self.rightButtonViewForTransitionArray rotationsValue:KRightTransformMakeRotation];
     } else {
         _rootViewController.view.frame = frame;
+        [self showShadow:YES];
         for (UIView *view in self.rightButtonViewForTransitionArray) {
             view.transform = CGAffineTransformMakeRotation(KRightTransformMakeRotation);
         }
@@ -663,7 +667,7 @@
         
         _rootViewController.view.frame = toFrame;
         [_rootViewController.view.layer removeAllAnimations];
-//        RECTLOG(_rootViewController.view.frame,@" rootView(%@) after move frame",_rootViewController.view);
+        [self showShadow:YES];
         
         for (UIView *view in viewTransitionArray) {
             [view.layer removeAllAnimations];
@@ -686,7 +690,7 @@
             }
             
             [_tap setEnabled:NO];
-            [self showShadow:NO];
+//            [self showShadow:NO];
             
             if ( self.mustinitTouchAction ) {
                 self.mustinitTouchAction = NO;
