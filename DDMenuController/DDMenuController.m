@@ -435,7 +435,8 @@
     } else if (gesture.state == UIGestureRecognizerStateEnded || gesture.state == UIGestureRecognizerStateCancelled) {
         
         //  Finishing moving to left, right or root view with current pan velocity
-        if (_panDirection == DDMenuPanDirectionRight && _menuFlags.showingLeftView && !(self.autoShowLeftOnIpadAtLandscape && SELF_VIEWCONTROLER_IS_IPAD_LANDSCAPE) ) {
+        if (_panDirection == DDMenuPanDirectionRight && _menuFlags.showingLeftView
+            && !(self.autoShowLeftOnIpadAtLandscape && SELF_VIEWCONTROLER_IS_IPAD_LANDSCAPE) ) {
             [self showLeftController:YES];
         } else if (_panDirection == DDMenuPanDirectionLeft && _menuFlags.showingRightView) {
             [self showRightController:YES];
@@ -553,7 +554,8 @@
 {
     if (!_menuFlags.canShowLeft) return;
     
-    if (_menuFlags.showingLeftView  && SELF_VIEWCONTROLER_IS_IPAD_LANDSCAPE) {
+    if (_menuFlags.showingLeftView
+        && self.autoShowLeftOnIpadAtLandscape && SELF_VIEWCONTROLER_IS_IPAD_LANDSCAPE )  {
         _rootViewController.view.userInteractionEnabled = YES;
         [_tap setEnabled:NO];
         return;
@@ -586,7 +588,7 @@
     frame = _rootViewController.view.frame;
     frame.origin.x =  kMenuLeftDisplayedWidth;
 //    RECTLOG(self.view.frame, @" applicationFrame");
-    if ( SELF_VIEWCONTROLER_IS_IPAD_LANDSCAPE ) {
+    if ( self.autoShowLeftOnIpadAtLandscape && SELF_VIEWCONTROLER_IS_IPAD_LANDSCAPE ) {
         frame.size.width = [[UIScreen mainScreen] applicationFrame].size.height - kMenuLeftDisplayedWidth;
         _rootViewController.view.userInteractionEnabled = YES;
         [_tap setEnabled:NO];
@@ -607,7 +609,7 @@
 {
     if (!_menuFlags.canShowRight) return;
     
-    if (_leftViewController && _leftViewController.view.superview && !(SELF_VIEWCONTROLER_IS_IPAD_LANDSCAPE && self.autoShowLeftOnIpadAtLandscape) )
+    if (_leftViewController && _leftViewController.view.superview)
 	{
         if ( !(self.autoShowLeftOnIpadAtLandscape && SELF_VIEWCONTROLER_IS_IPAD_LANDSCAPE) ) {
             [_leftViewController.view removeFromSuperview];
@@ -634,7 +636,7 @@
     
     frame = _rootViewController.view.frame;
     frame.origin.x = - kMenuRightDisplayedWidth ; //self.rightOverlayWidth;
-    if ( SELF_VIEWCONTROLER_IS_IPAD_LANDSCAPE ){
+    if ( self.autoShowLeftOnIpadAtLandscape && SELF_VIEWCONTROLER_IS_IPAD_LANDSCAPE ){
         frame.origin.x = kMenuLeftDisplayedWidth - kMenuRightDisplayedWidth;
 //        NSLog(@" root view :%@",_rootViewController.view);
 //        NSLog(@" root view subview :%@",_rootViewController.view.subviews);
@@ -835,7 +837,7 @@
         __block DDMenuController *selfRef = self;
         __block UIViewController *rootRef = _rootViewController;
         CGRect frame = rootRef.view.frame;
-        if ( ! SELF_VIEWCONTROLER_IS_IPAD_LANDSCAPE ) {
+        if ( ! (self.autoShowLeftOnIpadAtLandscape && SELF_VIEWCONTROLER_IS_IPAD_LANDSCAPE) ) {
             frame.origin.x = rootRef.view.bounds.size.width;
         }
         
