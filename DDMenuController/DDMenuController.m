@@ -210,6 +210,10 @@
        withViewArray:self.rightButtonViewForTapArray action:@selector(rightButtonViewTap:)];
     [self addGesture:[UIPanGestureRecognizer class]
        withViewArray:self.rightButtonViewForPanArray action:@selector(rightPan:)];
+    
+    if (self.autoShowLeftOnIpadAtLandscape && SELF_VIEWCONTROLER_IS_IPAD_LANDSCAPE ){
+        [self showLeftController:NO];
+    }
 }
 
 -(void) addGesture:(Class) className withViewArray:(NSArray *) viewArray action:(SEL) action {
