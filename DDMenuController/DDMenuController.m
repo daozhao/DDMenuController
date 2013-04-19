@@ -62,6 +62,7 @@
 
 @synthesize tap=_tap;
 @synthesize pan=_pan;
+@synthesize self_pan=_self_pan;
 
 @synthesize canShowLeft;
 @synthesize canShowRight;
@@ -138,6 +139,14 @@
         _tap = tap;
     }
     
+    if (!_self_pan ){
+        UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pan:)];
+        pan.delegate = (id<UIGestureRecognizerDelegate>)self;
+        [self.view addGestureRecognizer:pan];
+        [pan setEnabled:NO];
+        _self_pan = pan;
+    }
+    
     self.mustinitTouchAction = NO;
     [self performSelectorOnMainThread:@selector(initTouchAction) withObject:nil waitUntilDone:NO];
 //    NSLog(@"is ipad:%d",ISIPAD);
@@ -149,6 +158,9 @@
     [super viewDidUnload];
     [_tap release];
     _tap = nil;
+    
+    [_self_pan release];
+    _self_pan = nil;
     
     [_pan release];
     _pan = nil;
@@ -459,7 +471,7 @@
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer 
 {
     // Check for horizontal pan gesture
-    if (gestureRecognizer == _pan) 
+    if (gestureRecognizer == _pan )
 	{
 
         UIPanGestureRecognizer *panGesture = (UIPanGestureRecognizer*)gestureRecognizer;
@@ -468,6 +480,14 @@
         if ([panGesture velocityInView:self.view].x < 600 && sqrt(translation.x * translation.x) / sqrt(translation.y * translation.y) > 1) 
             return YES;
         
+        return NO;
+    }
+    if ( gestureRecognizer == _self_pan ){
+        UIPanGestureRecognizer *panGesture = (UIPanGestureRecognizer*)gestureRecognizer;
+        CGPoint touchPoint = [panGesture locationInView:self.rootViewController.view];
+        
+        if ( touchPoint.x >= 0 && touchPoint.x <= self.rootViewController.view.frame.size.width)
+                return YES;
         return NO;
     }
     
@@ -489,6 +509,10 @@
 {
     if (gestureRecognizer==_tap) 
         return YES;
+    
+    if (gestureRecognizer == _self_pan)
+        return YES;
+    
     return NO;
 }
 
@@ -512,6 +536,7 @@
 - (void)showRootController:(BOOL)animated 
 {
     [_tap setEnabled:NO];
+    [_self_pan setEnabled:NO];
     _rootViewController.view.userInteractionEnabled = YES;
 
     CGRect frame = _rootViewController.view.frame;
@@ -545,6 +570,7 @@
             view.transform = CGAffineTransformMakeRotation(0.0f);
         }
         [_tap setEnabled:NO];
+        [_self_pan setEnabled:NO];
         if ( self.mustinitTouchAction ) {
             self.mustinitTouchAction = NO;
             [self performSelectorOnMainThread:@selector(initTouchAction) withObject:nil waitUntilDone:NO];
@@ -560,6 +586,7 @@
         && self.autoShowLeftOnIpadAtLandscape && SELF_VIEWCONTROLER_IS_IPAD_LANDSCAPE )  {
         _rootViewController.view.userInteractionEnabled = YES;
         [_tap setEnabled:NO];
+        [_self_pan setEnabled:NO];
         [self showShadow:YES];
         return;
     }
@@ -579,6 +606,7 @@
     
     _rootViewController.view.userInteractionEnabled = NO;
     [_tap setEnabled:YES];
+    [_self_pan setEnabled:YES];
     
     UIView *view = self.leftViewController.view;
 	CGRect frame = self.view.bounds;
@@ -594,6 +622,7 @@
         frame.size.width = [[UIScreen mainScreen] applicationFrame].size.height - kMenuLeftDisplayedWidth;
         _rootViewController.view.userInteractionEnabled = YES;
         [_tap setEnabled:NO];
+        [_self_pan setEnabled:NO];
         
     }
     
@@ -649,6 +678,8 @@
     
     _rootViewController.view.userInteractionEnabled = NO;
     [_tap setEnabled:YES];
+    [_self_pan setEnabled:YES];
+    
     if (animated){
         [self showControllerAnimation:frame rotationsView:self.rightButtonViewForTransitionArray rotationsValue:KRightTransformMakeRotation];
     } else {
@@ -675,6 +706,7 @@
         }
         [self.view setUserInteractionEnabled:YES];
         [_tap setEnabled:YES];
+        [_self_pan setEnabled:YES];
         
         if ( _rootViewController.view.userInteractionEnabled ){
             if (_leftViewController && _leftViewController.view.superview) {
@@ -690,6 +722,7 @@
             }
             
             [_tap setEnabled:NO];
+            [_self_pan setEnabled:NO];
 //            [self showShadow:NO];
             
             if ( self.mustinitTouchAction ) {

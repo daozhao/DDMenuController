@@ -80,6 +80,7 @@ UIKIT_EXTERN CGFloat const DDMenuControllerDefaultRightOverlayWidth;
 	
     id _tap;
     id _pan;
+    id _self_pan;
     
     CGFloat _panOriginX;
     CGPoint _panVelocity;
@@ -113,6 +114,7 @@ UIKIT_EXTERN CGFloat const DDMenuControllerDefaultRightOverlayWidth;
 
 @property(nonatomic,readonly) UITapGestureRecognizer *tap;
 @property(nonatomic,readonly) UIPanGestureRecognizer *pan;
+@property(nonatomic,readonly) UIPanGestureRecognizer *self_pan;
 
 @property(nonatomic, readonly) MenuFlags menuFlags;
 @property(nonatomic) Boolean canShowLeft;
