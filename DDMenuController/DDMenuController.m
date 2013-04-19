@@ -298,9 +298,6 @@
         [_rootViewController didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 
         [self setRootViewFrame];
-//        CGRect frame = self.view.bounds;
-//        _rootViewController.view.frame = frame;
-//        _rootViewController.view.autoresizingMask = self.view.autoresizingMask;
         
         if (_menuFlags.showingRightView) {
             [self showRightController:NO];
@@ -318,7 +315,6 @@
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration 
 {
-//    NSLog(@"is ipad:%d",ISIPAD);
 	[super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
 
     if (_rootViewController) 
@@ -473,7 +469,6 @@
     // Check for horizontal pan gesture
     if (gestureRecognizer == _pan )
 	{
-
         UIPanGestureRecognizer *panGesture = (UIPanGestureRecognizer*)gestureRecognizer;
         CGPoint translation = [panGesture translationInView:self.view];
 
@@ -488,6 +483,7 @@
         
         if ( touchPoint.x >= 0 && touchPoint.x <= self.rootViewController.view.frame.size.width)
                 return YES;
+        
         return NO;
     }
     
@@ -527,8 +523,6 @@
         _rootViewController.view.layer.shadowOffset = CGSizeZero;
         _rootViewController.view.layer.shadowRadius = 4.0f;
         _rootViewController.view.layer.shadowPath = [UIBezierPath bezierPathWithRect:_rootViewController.view.bounds].CGPath;
-//        _rootViewController.view.layer.shadowPath = [UIBezierPath bezierPathWithRect:_rootViewController.view.frame].CGPath;
-//        _rootViewController.view.layer.shadowPath = [UIBezierPath bezierPathWithRect:self.view.bounds].CGPath;
     }
     
 }
@@ -617,7 +611,7 @@
     
     frame = _rootViewController.view.frame;
     frame.origin.x =  kMenuLeftDisplayedWidth;
-//    RECTLOG(self.view.frame, @" applicationFrame");
+    
     if ( self.autoShowLeftOnIpadAtLandscape && SELF_VIEWCONTROLER_IS_IPAD_LANDSCAPE ) {
         frame.size.width = [[UIScreen mainScreen] applicationFrame].size.height - kMenuLeftDisplayedWidth;
         _rootViewController.view.userInteractionEnabled = YES;
@@ -653,14 +647,11 @@
         [self.delegate menuController:self willShowViewController:self.rightViewController];
 
 	_menuFlags.showingRightView = YES;
-//    [self showShadow:YES];
 
     UIView *view = self.rightViewController.view;
-    
     CGRect frame = self.view.bounds;
 	frame.origin.x = frame.size.width - kMenuRightDisplayedWidth ;
 	frame.size.width = kMenuRightDisplayedWidth;
-    
     view.frame = frame;
     
     [self.view insertSubview:view atIndex:0];
@@ -670,10 +661,6 @@
     frame.origin.x = - kMenuRightDisplayedWidth ; //self.rightOverlayWidth;
     if ( self.autoShowLeftOnIpadAtLandscape && SELF_VIEWCONTROLER_IS_IPAD_LANDSCAPE ){
         frame.origin.x = kMenuLeftDisplayedWidth - kMenuRightDisplayedWidth;
-//        NSLog(@" root view :%@",_rootViewController.view);
-//        NSLog(@" root view subview :%@",_rootViewController.view.subviews);
-//        NSLog(@" root view prerent :%@",_rootViewController.view.superview);
-//        NSLog(@" root view prerent subview :%@",_rootViewController.view.superview.subviews);
     }
     
     _rootViewController.view.userInteractionEnabled = NO;
@@ -836,7 +823,6 @@
         UIView *view = _rootViewController.view;
         view.frame = self.view.bounds;
         self.view.backgroundColor = [UIColor clearColor];
-//        NSLog(@" DDMenuController:%@",self.view);
         [self.view addSubview:view];
         
         [_pan release];
@@ -919,7 +905,6 @@
     
     if (navController == nil) 
 	{
-//        NSLog(@"root controller is not a navigation controller.");
         return;
     }
 	
@@ -944,7 +929,6 @@
         return;
     }
     
-	//页面菜单
     if (_menuFlags.canShowLeft && self.autoLeftButtonImageName) {
         UIBarButtonItem *button = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:self.autoLeftButtonImageName] style:UIBarButtonItemStyleBordered target:self action:@selector(showLeft:)];
         topController.navigationItem.leftBarButtonItem = button;
