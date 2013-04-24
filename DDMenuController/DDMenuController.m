@@ -30,6 +30,9 @@
 #define kMenuLeftDisplayedWidth 200.0f
 #define kMenuRightDisplayedWidth 280.0f
 
+#define kMenuLeftDisplayedWidth_ipad 320.0f
+#define kMenuRightDisplayedWidth_ipad 320.0f
+
 #define kMenuBounceOffset 10.0f
 #define kMenuBounceDuration .3f
 #define kMenuSlideDuration .3f
@@ -67,6 +70,8 @@
 @synthesize canShowLeft;
 @synthesize canShowRight;
 @synthesize autoShowLeftOnIpadAtLandscape;
+@synthesize leftMenuWidth;
+@synthesize rightMenuWidth;
 
 
 @synthesize menuFlags = _menuFlags;
@@ -127,6 +132,15 @@
 - (void)viewDidLoad 
 {
     [super viewDidLoad];
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+    {
+        self.leftMenuWidth = kMenuLeftDisplayedWidth;
+        self.rightMenuWidth = kMenuRightDisplayedWidth;
+    } else {
+        self.leftMenuWidth = kMenuLeftDisplayedWidth_ipad;
+        self.rightMenuWidth = kMenuRightDisplayedWidth_ipad;
+    }
 	
     [self setRootViewController:_rootViewController]; // reset root
     
@@ -282,7 +296,7 @@
     _rootViewController.view.autoresizingMask = self.view.autoresizingMask;
     
     if ( self.autoShowLeftOnIpadAtLandscape && SELF_VIEWCONTROLER_IS_IPAD_LANDSCAPE ){
-        _rootViewController.view.frame= CGRectMake(frame.origin.x + kMenuLeftDisplayedWidth, frame.origin.y,frame.size.width - kMenuLeftDisplayedWidth,frame.size.height );
+        _rootViewController.view.frame= CGRectMake(frame.origin.x + self.leftMenuWidth , frame.origin.y,frame.size.width - self.leftMenuWidth,frame.size.height );
         
     }
     
@@ -343,7 +357,7 @@
     float zeroX = 0.0f;
     
     if ( self.autoShowLeftOnIpadAtLandscape && SELF_VIEWCONTROLER_IS_IPAD_LANDSCAPE ){
-        zeroX = kMenuLeftDisplayedWidth;
+        zeroX = self.leftMenuWidth;
     }
 
     if (gesture.state == UIGestureRecognizerStateBegan) 
@@ -385,17 +399,17 @@
 		
         CGRect frame = CGRectMake(_panOriginX + translation.x, _rootViewController.view.frame.origin.y, _rootViewController.view.bounds.size.width, _rootViewController.view.bounds.size.height);
         
-        if ( frame.origin.x < kMenuLeftDisplayedWidth && frame.origin.x > zeroX - kMenuRightDisplayedWidth ){
+        if ( frame.origin.x < self.leftMenuWidth && frame.origin.x > zeroX - self.rightMenuWidth ){
             _rootViewController.view.frame = frame;
         
             if ( frame.origin.x > zeroX ){
                 
-                self.transformRotationStatus = KLeftTransformMakeRotation * (frame.origin.x /kMenuLeftDisplayedWidth );
+                self.transformRotationStatus = KLeftTransformMakeRotation * (frame.origin.x /self.leftMenuWidth );
                 for (UIView *view in self.leftButtonViewForTransitionArray) {
                     view.transform = CGAffineTransformMakeRotation(self.transformRotationStatus);
                 }
             } else if ( frame.origin.x < zeroX) {
-                self.transformRotationStatus = -KRightTransformMakeRotation * ((frame.origin.x - zeroX) /kMenuRightDisplayedWidth );
+                self.transformRotationStatus = -KRightTransformMakeRotation * ((frame.origin.x - zeroX) /self.rightMenuWidth );
                 for (UIView *view in self.rightButtonViewForTransitionArray) {
                     view.transform = CGAffineTransformMakeRotation(self.transformRotationStatus);
                 }
@@ -411,7 +425,7 @@
             if (_menuFlags.canShowLeft) {
                 _menuFlags.showingLeftView = YES;
                 CGRect frame = self.view.bounds;
-				frame.size.width = kMenuLeftDisplayedWidth; // kMenuFullWidth;
+				frame.size.width = self.leftMenuWidth; // kMenuFullWidth;
                 self.leftViewController.view.frame = frame;
                 [self.view insertSubview:self.leftViewController.view atIndex:0];
             } else {
@@ -429,8 +443,8 @@
                 _menuFlags.showingRightView = YES;
                 CGRect frame = self.view.bounds;
                 
-                frame.origin.x = frame.size.width - kMenuRightDisplayedWidth;
-                frame.size.width = kMenuRightDisplayedWidth;
+                frame.origin.x = frame.size.width - self.rightMenuWidth;
+                frame.size.width = self.rightMenuWidth;
                 
                 self.rightViewController.view.frame = frame;
                 [self.view insertSubview:self.rightViewController.view atIndex:0];
@@ -545,7 +559,7 @@
     if (animated){
         if (_menuFlags.showingRightView ) {
             if ( self.autoShowLeftOnIpadAtLandscape && SELF_VIEWCONTROLER_IS_IPAD_LANDSCAPE) {
-                frame.origin.x = kMenuLeftDisplayedWidth;
+                frame.origin.x = self.leftMenuWidth;
                 _menuFlags.showingLeftView = YES;
              }
             [self showControllerAnimation:frame rotationsView:self.rightButtonViewForTransitionArray rotationsValue:0.0f];
@@ -604,16 +618,16 @@
     
     UIView *view = self.leftViewController.view;
 	CGRect frame = self.view.bounds;
-    frame.size.width =  kMenuLeftDisplayedWidth; 
+    frame.size.width =  self.leftMenuWidth; 
     view.frame = frame;
     [self.view insertSubview:view atIndex:0];
     [self.leftViewController viewWillAppear:animated];
     
     frame = _rootViewController.view.frame;
-    frame.origin.x =  kMenuLeftDisplayedWidth;
+    frame.origin.x =  self.leftMenuWidth;
     
     if ( self.autoShowLeftOnIpadAtLandscape && SELF_VIEWCONTROLER_IS_IPAD_LANDSCAPE ) {
-        frame.size.width = [[UIScreen mainScreen] applicationFrame].size.height - kMenuLeftDisplayedWidth;
+        frame.size.width = [[UIScreen mainScreen] applicationFrame].size.height - self.leftMenuWidth;
         _rootViewController.view.userInteractionEnabled = YES;
         [_tap setEnabled:NO];
         [_self_pan setEnabled:NO];
@@ -650,17 +664,17 @@
 
     UIView *view = self.rightViewController.view;
     CGRect frame = self.view.bounds;
-	frame.origin.x = frame.size.width - kMenuRightDisplayedWidth ;
-	frame.size.width = kMenuRightDisplayedWidth;
+	frame.origin.x = frame.size.width - self.rightMenuWidth ;
+	frame.size.width = self.rightMenuWidth;
     view.frame = frame;
     
     [self.view insertSubview:view atIndex:0];
     [self.rightViewController viewWillAppear:animated];
     
     frame = _rootViewController.view.frame;
-    frame.origin.x = - kMenuRightDisplayedWidth ; //self.rightOverlayWidth;
+    frame.origin.x = - self.rightMenuWidth ; //self.rightOverlayWidth;
     if ( self.autoShowLeftOnIpadAtLandscape && SELF_VIEWCONTROLER_IS_IPAD_LANDSCAPE ){
-        frame.origin.x = kMenuLeftDisplayedWidth - kMenuRightDisplayedWidth;
+        frame.origin.x = self.leftMenuWidth - self.rightMenuWidth;
     }
     
     _rootViewController.view.userInteractionEnabled = NO;

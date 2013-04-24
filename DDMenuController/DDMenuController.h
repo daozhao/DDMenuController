@@ -120,6 +120,8 @@ UIKIT_EXTERN CGFloat const DDMenuControllerDefaultRightOverlayWidth;
 @property(nonatomic) Boolean canShowLeft;
 @property(nonatomic) Boolean canShowRight;
 @property(nonatomic) Boolean autoShowLeftOnIpadAtLandscape;
+@property(nonatomic) NSInteger leftMenuWidth;
+@property(nonatomic) NSInteger rightMenuWidth;
 
 - (void)setRootController:(UIViewController *)controller animated:(BOOL)animated; // used to push a new controller on the stack
 - (void)setLeftViewController:(UIViewController *)leftController autoButtonIamgeName:(NSString *) name;
