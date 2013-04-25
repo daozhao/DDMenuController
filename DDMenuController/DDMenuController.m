@@ -541,6 +541,15 @@
     
 }
 
+- (void)setView:(UIView *) view toWidth:(CGFloat) width
+{
+    CGRect frame = view.bounds;
+    frame.size.width = width;
+    view.frame = frame;
+    
+    return;
+}
+
 - (void)showRootController:(BOOL)animated 
 {
     [_tap setEnabled:NO];
@@ -595,6 +604,7 @@
         _rootViewController.view.userInteractionEnabled = YES;
         [_tap setEnabled:NO];
         [_self_pan setEnabled:NO];
+        [self setView:self.leftViewController.view toWidth:self.leftMenuWidth];
         [self showShadow:YES];
         return;
     }
@@ -616,14 +626,11 @@
     [_tap setEnabled:YES];
     [_self_pan setEnabled:YES];
     
-    UIView *view = self.leftViewController.view;
-	CGRect frame = self.view.bounds;
-    frame.size.width =  self.leftMenuWidth; 
-    view.frame = frame;
-    [self.view insertSubview:view atIndex:0];
+    [self setView:self.leftViewController.view toWidth:self.leftMenuWidth];
+    [self.view insertSubview:self.leftViewController.view atIndex:0];
     [self.leftViewController viewWillAppear:animated];
     
-    frame = _rootViewController.view.frame;
+    CGRect frame = _rootViewController.view.frame;
     frame.origin.x =  self.leftMenuWidth;
     
     if ( self.autoShowLeftOnIpadAtLandscape && SELF_VIEWCONTROLER_IS_IPAD_LANDSCAPE ) {
@@ -631,7 +638,6 @@
         _rootViewController.view.userInteractionEnabled = YES;
         [_tap setEnabled:NO];
         [_self_pan setEnabled:NO];
-        
     }
     
     if (animated){
