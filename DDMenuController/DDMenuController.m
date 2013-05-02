@@ -104,6 +104,7 @@
     if ((self = [super init])) 
 	{
         _rootViewController = controller;
+        [self addChildViewController:_rootViewController];
         self.mustinitTouchAction = NO;
         self.autoShowLeftOnIpadAtLandscape = YES;
     }
@@ -804,8 +805,10 @@
 - (void)setRightViewController:(UIViewController *)rightController autoButtonIamgeName:(NSString *) name
 {
     if ( _rightViewController != rightController ){
+        [_rightViewController removeFromParentViewController];
         [_rightViewController release];
         _rightViewController = [rightController don_retain];
+        [self addChildViewController:_rightViewController];
     }
     
     self.autoRightButtonImageName = name;
@@ -820,8 +823,10 @@
 - (void)setLeftViewController:(UIViewController *)leftController autoButtonIamgeName:(NSString *) name
 {
     if ( _leftViewController != leftController ){
+        [_leftViewController removeFromParentViewController];
         [_leftViewController release];
         _leftViewController = [leftController don_retain];
+        [self addChildViewController:_leftViewController];
     }
     
     self.autoLeftButtonImageName = name;
@@ -834,10 +839,13 @@
     if ( _rootViewController != rootController )
     {
         if (_rootViewController) {
+            [_rootViewController removeFromParentViewController];
             [_rootViewController.view removeFromSuperview];
             [_rootViewController release];
         }
         _rootViewController = [rootController don_retain];
+        [self addChildViewController:_rootViewController];
+        
     }
     if (_rootViewController && _rootViewController.view.superview != self.view ) {
         UIView *view = _rootViewController.view;

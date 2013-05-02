@@ -35,6 +35,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRotate:) name:@"UIDeviceOrientationDidChangeNotification" object:nil];
     if (!_tableView) {
         UITableView *tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
         tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -60,6 +61,7 @@
 
 - (UITableViewCell*)tableView:(UITableView*)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
+    NSLog(@"tableView:cellforrowAtIndexPath:。---interFaceOrientation:%d,DeviceOrientation:%d",self.interfaceOrientation,[[UIDevice currentDevice] orientation]);
     static NSString *CellIdentifier = @"CellIdentifier";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if(cell == nil) {
@@ -106,6 +108,29 @@
     
 }
 
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    NSLog(@"willRotateToInterfaceOrientation orientation:%d",toInterfaceOrientation);
 
+}
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    NSLog(@"didRotateFromInterfaceOrientation:%d",fromInterfaceOrientation);
+    //    [self.tableView reloadData];
+}
+
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration
+{
+    NSLog(@"willAnimateRotationToInterfaceOrientation:%d",interfaceOrientation);
+}
+
+- (void)didRotate:(NSNotification *)notification
+{
+    NSLog(@"didRotate:。---interFaceOrientation:%d,DeviceOrientation:%d",self.interfaceOrientation,[[UIDevice currentDevice] orientation]);
+//    [self.tableView reloadData];
+    //[[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+    //UIDeviceOrientationDidChangeNotification
+    //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRotate:) name:@"UIDeviceOrientationDidChangeNotification" object:nil];
+}
 
 @end
